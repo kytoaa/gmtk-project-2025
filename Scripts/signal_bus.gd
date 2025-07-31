@@ -1,3 +1,4 @@
 extends Node
 
-signal on_transition_finished
+signal on_scene_transition_finished
+signal on_scene_transition_fade_to_black

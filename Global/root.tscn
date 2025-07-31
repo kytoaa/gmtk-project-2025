@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxn7hyas4p0gu"]
+
+[ext_resource type="PackedScene" uid="uid://bdsiisqx67oya" path="res://Global/navigation_manager.tscn" id="1_xe1jy"]
+[ext_resource type="PackedScene" uid="uid://cii4f335s74ie" path="res://UI/main_menu.tscn" id="2_unjgg"]
+
+[node name="Root" type="Node"]
+
+[node name="NavigationManager" parent="." instance=ExtResource("1_xe1jy")]
+
+[node name="main_menu" parent="NavigationManager" instance=ExtResource("2_unjgg")]

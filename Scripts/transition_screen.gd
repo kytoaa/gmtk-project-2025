@@ -15,11 +15,11 @@ func _ready():
 
 func _on_animation_finished(anim_name):
 	if anim_name == FADE_TO_BLACK:
+		SignalBus.on_scene_transition_fade_to_black.emit()
 		animation_player.play(FADE_TO_NORMAL)
-		on_transition_finished.emit()
 	elif anim_name == FADE_TO_NORMAL:
 		color_rect.visible = false
-	
+		SignalBus.on_scene_transition_finished.emit()
 func play_transition():
 	color_rect.visible = true
 	animation_player.play(FADE_TO_BLACK)
