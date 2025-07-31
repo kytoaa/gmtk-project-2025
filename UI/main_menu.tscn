@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://cii4f335s74ie"]
+[gd_scene load_steps=2 format=3 uid="uid://cii4f335s74ie"]
+
+[sub_resource type="Theme" id="Theme_5yyqw"]
 
 [node name="main_menu" type="Control"]
 layout_mode = 3
@@ -9,15 +11,22 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_5yyqw")
 
-[node name="Button" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = -1
-offset_left = -90.0
-offset_top = -19.0
-offset_right = 3.0
-offset_bottom = 12.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(2, 2)
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_top = -27.0
+offset_right = 201.0
+offset_bottom = 120.0
+
+[node name="Start_game" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 text = "Start game"
+
+[node name="Settings" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"

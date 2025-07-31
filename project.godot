@@ -15,6 +15,10 @@ run/main_scene="res://UI/main_menu.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+TransitionScreen="*res://Global/transition_screen.tscn"
+
 [file_customization]
 
 folder_colors={
