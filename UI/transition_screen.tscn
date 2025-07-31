@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bialo1ufi58bb"]
+
+[node name="TransitionScreen" type="CanvasLayer"]

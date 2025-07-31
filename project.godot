@@ -11,8 +11,15 @@ config_version=5
 [application]
 
 config/name="gmtk-project"
+run/main_scene="res://UI/main_menu.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[file_customization]
+
+folder_colors={
+"res://systems/": "gray"
+}
 
 [rendering]
 
