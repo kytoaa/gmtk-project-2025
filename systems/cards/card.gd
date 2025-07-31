@@ -21,6 +21,7 @@ static func build(type: CardType, suit: CardSuit) -> Card:
 	card.suit = suit
 	card.times_used = 0
 	card.marked = false
+	card.itemtype = ItemType.Card
 	return card
 
 

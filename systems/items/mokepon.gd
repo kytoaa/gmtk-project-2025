@@ -13,5 +13,7 @@ enum Mokepon {
 
 var mokepon: Mokepon
 
-func _init(mokepon: Mokepon) -> void:
+func _init(mokepon: Mokepon, count: int = 1) -> void:
 	self.mokepon = mokepon
+	self.count = count
+	self.itemtype = ItemType.MokeponCard

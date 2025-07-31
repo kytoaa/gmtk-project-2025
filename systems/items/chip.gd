@@ -9,8 +9,8 @@ enum Colour {
 }
 
 var colour: Colour
-var count: int
 
 func _init(colour: Colour, count: int) -> void:
 	self.colour = colour
 	self.count = count
+	self.itemtype = ItemType.Chip

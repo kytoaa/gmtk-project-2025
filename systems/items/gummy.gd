@@ -15,5 +15,7 @@ enum Colour {
 
 var colour: Colour
 
-func _init(colour: Colour) -> void:
+func _init(colour: Colour, count: int = 1) -> void:
 	self.colour = colour
+	self.count = count
+	self.itemtype = ItemType.GummyBear
