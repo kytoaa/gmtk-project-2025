@@ -37,8 +37,7 @@ enum CardSuit {
 	D,
 }
 
-
-class Card extends InventoryItem:
+class Card:
 	var type: CardType
 	var suit: CardSuit
 	
