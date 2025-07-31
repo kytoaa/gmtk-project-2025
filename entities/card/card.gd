@@ -11,9 +11,6 @@ const LIGHT_COLOR: Color = Color("d51010")
 @onready var suit1: Sprite2D = $NumberSuit1/Suit
 @onready var suit2: Sprite2D = $NumberSuit2/Suit
 
-func _ready() -> void:
-	self.init(CardType.NUMBER_13, CardSuit.HEARTS)
-
 func init(type: CardType, suit: CardSuit) -> void:
 	number1.offset.x = 0
 	number1.region_rect.size.x = 3
@@ -23,8 +20,8 @@ func init(type: CardType, suit: CardSuit) -> void:
 	number2.flip_h = false
 	match type:
 		CardType.NUMBER_1:
-			number1.region_rect.position.x = 51.0
-			number2.region_rect.position.x = 51.0
+			number1.region_rect.position.x = 50.0
+			number2.region_rect.position.x = 50.0
 		CardType.NUMBER_2:
 			number1.region_rect.position.x = 6.0
 			number2.region_rect.position.x = 6.0
