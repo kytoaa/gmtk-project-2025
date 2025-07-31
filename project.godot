@@ -17,15 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TransitionScreen="*res://Global/transition_screen.tscn"
-SignalBus="*res://Global/signal_bus.tscn"
-NavigationManager="*res://Global/navigation_manager.tscn"
-
-[file_customization]
-
-folder_colors={
-"res://systems/": "gray"
-}
+NavigationManager="*res://globals/navigation_manager.tscn"
+TransitionScreen="*res://globals/transition_screen.tscn"
+SignalBus="*res://globals/signal_bus.tscn"
 
 [rendering]
 
