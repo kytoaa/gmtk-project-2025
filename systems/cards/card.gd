@@ -41,8 +41,8 @@ enum CardType {
 }
 
 enum CardSuit {
-	A,
-	B,
-	C,
-	D,
+	HEARTS,
+	DIAMONDS,
+	CLUBS,
+	SPADES,
 }
