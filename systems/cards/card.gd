@@ -1,5 +1,5 @@
 class_name Card
-extends Resource
+extends InventoryItem
 
 var type: CardType
 var suit: CardSuit
@@ -25,7 +25,7 @@ static func build(type: CardType, suit: CardSuit) -> Card:
 
 
 enum CardType {
-	NUMBER_1,
+	NUMBER_1 = 1,
 	NUMBER_2,
 	NUMBER_3,
 	NUMBER_4,

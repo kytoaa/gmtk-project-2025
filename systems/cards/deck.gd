@@ -8,7 +8,7 @@ var cards: Array[Card]
 
 
 func _init() -> void:
-	var cards = []
+	var cards: Array[Card] = []
 	for suit in CardSuit.values():
 		for type in CardType.values():
 			cards.append(Card.build(type, suit))
