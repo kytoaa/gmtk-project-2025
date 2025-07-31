@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdsiisqx67oya"]
+
+[ext_resource type="Script" uid="uid://c500ob0cm2fac" path="res://Scripts/navigation_manager.gd" id="1_kfw2d"]
+
+[node name="NavigationManager" type="Node"]
+script = ExtResource("1_kfw2d")
