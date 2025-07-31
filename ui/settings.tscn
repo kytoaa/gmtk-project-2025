@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://bq406r2elct1v"]
+[gd_scene load_steps=2 format=3 uid="uid://bq406r2elct1v"]
+
+[ext_resource type="Script" uid="uid://bs1vmsrc2v8lh" path="res://ui/settings.gd" id="1_7kwmf"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_7kwmf")
 
 [node name="HSlider" type="HSlider" parent="."]
 layout_mode = 1
@@ -15,9 +18,20 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -210.0
+offset_left = -120.0
 offset_top = -12.0
+offset_right = -8.0
 offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 35.0
+offset_right = 213.0
+offset_bottom = 62.0
+text = "Back"
+
+[connection signal="pressed" from="Button" to="." method="on_back_pressed"]
