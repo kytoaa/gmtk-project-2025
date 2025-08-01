@@ -34,6 +34,10 @@ folder_colors={
 "res://systems/": "gray"
 }
 
+[gui]
+
+theme/custom_font="uid://d2ffbevas2n66"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

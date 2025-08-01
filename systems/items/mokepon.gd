@@ -13,7 +13,9 @@ enum Mokepon {
 
 var mokepon: Mokepon
 
-static func build(mokepon: Mokepon) -> MokeponCard:
+static func build(mokepon: Mokepon, count: int = 1) -> MokeponCard:
 	var card = MokeponCard.new()
 	card.mokepon = mokepon
+	card.count = count
+	card.itemtype = ItemType.MokeponCard
 	return card
