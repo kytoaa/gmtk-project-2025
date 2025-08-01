@@ -40,3 +40,27 @@ func remove_item(item: InventoryItem) -> void:
 		return
 	
 	search[0].count = newcount
+
+func money() -> int:
+	var sum: int = 0
+	for item in self.items:
+		if item.itemtype == InventoryItem.ItemType.Chip:
+			sum += item.colour * item.count
+	return sum
+
+func take_money(price: int) -> void:
+	if self.money() < price:
+		printerr("Not enough money in inventory")
+	var newmoney: int = self.money() - price
+	for i in range(len(items)):
+		if items[i].itemtype == InventoryItem.ItemType.Chip:
+			items.remove_at(i)
+	
+	const denominations = [500, 100, 50, 10, 1]
+	for i in range(len(denominations)):
+		while newmoney >= denominations[i]:
+			newmoney -= denominations[i]
+			self.add_item(Chip.new(denominations[i], 1))
+	
+	if newmoney != 0:
+		printerr("Still money left to take: ", newmoney)

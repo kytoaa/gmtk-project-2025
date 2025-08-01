@@ -2,10 +2,11 @@ class_name Chip
 extends InventoryItem
 
 enum Colour {
-	Blue = 10,
-	Green = 50,
-	Red = 100,
-	Black = 1000
+	White = 1,
+	Red = 10,
+	Blue = 50,
+	Green = 100,
+	Black = 500,
 }
 
 var colour: Colour

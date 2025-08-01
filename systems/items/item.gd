@@ -2,7 +2,7 @@ class_name InventoryItem
 extends Resource
 
 enum ItemType {
-	MokeponCard,
+	MokeponCard = 0,
 	GummyBear,
 	Chip,
 	Card
