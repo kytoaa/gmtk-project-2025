@@ -8,10 +8,11 @@
 script = ExtResource("1_lxn7g")
 
 [node name="Background" type="Sprite2D" parent="."]
+clip_children = 2
 texture = ExtResource("2_4bbms")
 
 [node name="NumberSuit1" type="Node2D" parent="."]
-position = Vector2(-6.5, -6)
+position = Vector2(-14.5, -19)
 
 [node name="Number" type="Sprite2D" parent="NumberSuit1"]
 position = Vector2(0, -2.5)
@@ -20,23 +21,23 @@ region_enabled = true
 region_rect = Rect2(6, 0, 3, 5)
 
 [node name="Suit" type="Sprite2D" parent="NumberSuit1"]
-position = Vector2(13, -3.5)
+position = Vector2(0, 3)
 texture = ExtResource("3_4bbms")
 region_enabled = true
 region_rect = Rect2(58, 0, 3, 5)
 
 [node name="NumberSuit2" type="Node2D" parent="."]
-position = Vector2(6.5, 6)
+position = Vector2(14.5, 19)
 rotation = 3.14159
 
 [node name="Number" type="Sprite2D" parent="NumberSuit2"]
 position = Vector2(0, -2.5)
 texture = ExtResource("3_4bbms")
 region_enabled = true
-region_rect = Rect2(0, 0, 3, 5)
+region_rect = Rect2(6, 0, 3, 5)
 
 [node name="Suit" type="Sprite2D" parent="NumberSuit2"]
-position = Vector2(13, -3.5)
+position = Vector2(0, 3)
 texture = ExtResource("3_4bbms")
 region_enabled = true
-region_rect = Rect2(54, 0, 3, 5)
+region_rect = Rect2(58, 0, 3, 5)
