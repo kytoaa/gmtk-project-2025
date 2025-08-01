@@ -5,6 +5,11 @@ var cards
 var sum: int
 var base_sum: int          # sum where aces = 1 point
 
+
+func _init() -> void:
+	self.cards = []
+	self.sum = 0
+
 func add_card(card) -> void:
 	cards.append(card)
 	if not "type" in card:
@@ -30,7 +35,5 @@ func add_card(card) -> void:
 	
 	self.sum = _sum
 
-
-func _init() -> void:
-	self.cards = []
-	self.sum = 0
+func has_lost() -> bool:
+	return sum > 21

@@ -4,11 +4,11 @@ extends Resource
 const CardSuit = Card.CardSuit
 const CardType = Card.CardType
 
-var cards: Array[Card]
+var cards: Array
 
 
 func _init() -> void:
-	var cards: Array[Card] = []
+	var cards := []
 	for suit in CardSuit.values():
 		for type in CardType.values():
 			cards.append(Card.build(type, suit))
@@ -16,7 +16,13 @@ func _init() -> void:
 	self.cards = cards
 
 func count_suit(suit: CardSuit) -> int:
-	return len(self.cards.filter(func(card: Card): card.suit == suit))
+	return len(self.cards.filter(func(card): "suit" in card and card.suit == suit))
 
 func count_type(type: CardType) -> int:
-	return len(self.cards.filter(func(card: Card): card.type == type))
+	return len(self.cards.filter(func(card): "type" in card and card.type == type))
+
+func shuffle() -> void:
+	self.cards.shuffle()
+
+func draw_card() -> Variant:
+	return self.cards.pop_back()
