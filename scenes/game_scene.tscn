@@ -49,6 +49,13 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="TotalDisplay" type="Label" parent="UI/SegmentSplitter/VBoxContainer2/OpponentCards"]
+offset_top = 100.0
+offset_right = 320.0
+offset_bottom = 116.0
+text = "Total: 0"
+vertical_alignment = 2
+
 [node name="MarginContainer" type="MarginContainer" parent="UI/SegmentSplitter/VBoxContainer2/OpponentCards"]
 layout_mode = 1
 anchors_preset = 15
@@ -85,6 +92,12 @@ size_flags_horizontal = 3
 [node name="PlayerCards" type="Control" parent="UI/SegmentSplitter/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="TotalDisplay" type="Label" parent="UI/SegmentSplitter/VBoxContainer2/PlayerCards"]
+layout_mode = 2
+offset_right = 320.0
+offset_bottom = 16.0
+text = "Total: 0"
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/SegmentSplitter/VBoxContainer2/PlayerCards"]
 layout_mode = 1
@@ -138,6 +151,14 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ycayy")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kk2rg")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_b5spy")
 
+[node name="Button" type="Button" parent="UI/SegmentSplitter/RightSide/VBoxContainer/Deck"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 96.0
+offset_right = 67.0
+offset_bottom = 120.0
+text = "Hold"
+
 [node name="Control3" type="Control" parent="UI/SegmentSplitter/RightSide/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -157,3 +178,4 @@ fill_mode = 3
 show_percentage = false
 
 [connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button" to="." method="draw_player_card"]
+[connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Button" to="." method="player_hold"]

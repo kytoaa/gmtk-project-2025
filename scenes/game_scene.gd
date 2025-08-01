@@ -10,7 +10,9 @@ var game_data: GameData
 @onready var dealer_hand: Hand = Hand.new()
 
 @onready var player_hand_display: CardContainer = $UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/CardContainer
+@onready var player_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/PlayerCards/TotalDisplay
 @onready var dealer_hand_display: CardContainer = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/MarginContainer/CardContainer
+@onready var dealer_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/TotalDisplay
 
 var player_turn: bool = true
 
@@ -30,14 +32,22 @@ func draw_player_card() -> void:
 		return
 	
 	var card = self.draw_card(player_hand, player_hand_display, player_lose)
+	player_hand_total.text = "Total: " + str(player_hand.sum)
 	if "mokepon" in card:
 		player_turn = false
+
+func player_hold() -> void:
+	if not player_turn:
+		return
 	
+	player_turn = false
+
 func draw_dealer_card() -> void:
 	if player_turn:
 		return
 	
 	var card = self.draw_card(dealer_hand, dealer_hand_display, dealer_lose)
+	dealer_hand_total.text = "Total: " + str(dealer_hand.sum)
 	if "mokepon" in card:
 		game_data.cheat_meter += 20.0
 
@@ -63,6 +73,7 @@ func draw_card(hand: Hand, card_container: CardContainer, loss_f: Callable) -> V
 
 
 func player_lose() -> void:
+	player_turn = false
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
