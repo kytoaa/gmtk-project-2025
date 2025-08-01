@@ -1,7 +1,9 @@
 extends Node
 
 const CardContainer = preload("res://ui/card_container.gd")
-const CARD = preload("res://entities/card/card.tscn")
+
+const CARD_SPRITE = preload("res://entities/card/card.tscn")
+const MOKEPON_SPRITE = preload("res://entities/mokepon/mokepon_card.tscn")
 
 var game_data: GameData
 @onready var player_hand: Hand = Hand.new()
@@ -44,9 +46,14 @@ func draw_card(hand: Hand, card_container: CardContainer, loss_f: Callable) -> V
 	
 	hand.add_card(card)
 	
-	var card_sprite := CARD.instantiate()
+	var is_mokepon = "mokepon" in card
+	
+	var card_sprite := MOKEPON_SPRITE.instantiate() if is_mokepon else CARD_SPRITE.instantiate()
 	card_container.add_card(card_sprite)
-	card_sprite.init(card.type, card.suit)
+	if is_mokepon:
+		card_sprite.init(card.mokepon)
+	else:
+		card_sprite.init(card.type, card.suit)
 	
 	if hand.has_lost():
 		loss_f.call()

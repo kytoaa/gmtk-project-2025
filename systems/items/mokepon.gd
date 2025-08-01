@@ -13,5 +13,7 @@ enum Mokepon {
 
 var mokepon: Mokepon
 
-func _init(mokepon: Mokepon) -> void:
-	self.mokepon = mokepon
+static func build(mokepon: Mokepon) -> MokeponCard:
+	var card = MokeponCard.new()
+	card.mokepon = mokepon
+	return card

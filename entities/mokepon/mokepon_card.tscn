@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://m7bmalejs1hx"]
+
+[ext_resource type="Texture2D" uid="uid://c7y3x281uxm2t" path="res://entities/card/sprites/base_card.png" id="1_011s1"]
+[ext_resource type="Script" uid="uid://ba1j6lwit5pex" path="res://entities/mokepon/mokepon_card.gd" id="1_nqqu7"]
+
+[node name="MokeponCard" type="Node2D"]
+script = ExtResource("1_nqqu7")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_011s1")
