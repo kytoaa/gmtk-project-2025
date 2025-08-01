@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 NavigationManager="*res://globals/navigation_manager.tscn"
 TransitionScreen="*res://globals/transition_screen.tscn"
 SignalBus="*res://globals/signal_bus.tscn"
+AudioManager="*res://globals/audio_manager.gd"
 
 [rendering]
 

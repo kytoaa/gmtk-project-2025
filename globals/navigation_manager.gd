@@ -14,8 +14,6 @@ func go_to_scene(scene: PackedScene):
 	
 	await SignalBus.on_scene_transition_fade_to_black
 	
-	print(scene.get_state())
-	
 	for loaded_scene in scenes:
 		loaded_scene.queue_free()
 		

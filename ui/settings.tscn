@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bq406r2elct1v"]
+[gd_scene load_steps=4 format=3 uid="uid://bq406r2elct1v"]
 
 [ext_resource type="Script" uid="uid://bs1vmsrc2v8lh" path="res://ui/settings.gd" id="1_7kwmf"]
+[ext_resource type="AudioStream" uid="uid://bnkcglb5aggs1" path="res://sounds/sample_sfx.mp3" id="3_feasd"]
+[ext_resource type="AudioStream" uid="uid://cxu73rrf70o2w" path="res://sounds/sample_music.mp3" id="6_045ga"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -11,27 +13,105 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7kwmf")
 
-[node name="HSlider" type="HSlider" parent="."]
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_feasd")
+bus = &"Sfx"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_045ga")
+bus = &"Music"
+
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -12.0
-offset_right = -8.0
-offset_bottom = 4.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.190762, 0.190762, 0.190762, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_right = 256
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="GridContainer2" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+columns = 2
+
+[node name="MasterLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Master Volume"
+horizontal_alignment = 1
+
+[node name="MasterVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.025
+value = 0.5
+ticks_on_borders = true
+
+[node name="SfxLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Sound Effects Volume"
+horizontal_alignment = 1
+
+[node name="SfxVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+max_value = 1.0
+step = 0.025
+value = 0.5
+
+[node name="MusicLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Music Volume"
+horizontal_alignment = 1
+
+[node name="MusicVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+max_value = 1.0
+step = 0.025
+value = 0.5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+
+[node name="SfxButton" type="Button" parent="MarginContainer/VBoxContainer/GridContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Play Sample SFX"
+
+[node name="MusicButton" type="Button" parent="MarginContainer/VBoxContainer/GridContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Play Sample Music"
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 31.0
 scale = Vector2(2, 2)
 
-[node name="Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 93.0
-offset_top = 35.0
-offset_right = 213.0
-offset_bottom = 62.0
+[node name="BackButton" type="Button" parent="MarginContainer2"]
+z_index = 1
+layout_mode = 2
 text = "Back"
 
-[connection signal="pressed" from="Button" to="." method="on_back_pressed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/MasterVolume" to="." method="on_master_volume_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/SfxVolume" to="." method="on_sfx_volume_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/MusicVolume" to="." method="on_music_volume_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer2/HBoxContainer/SfxButton" to="." method="on_sfx_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/GridContainer2/HBoxContainer/MusicButton" to="." method="on_music_button_pressed"]
+[connection signal="pressed" from="MarginContainer2/BackButton" to="." method="on_back_pressed"]
