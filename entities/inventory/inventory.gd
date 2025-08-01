@@ -32,11 +32,11 @@ func remove_item(item: InventoryItem) -> void:
 	var search = items.filter(func(it): return should_share_slot(it, item))
 	
 	if len(search) == 0:
-		print("Err")
+		printerr("Item not here to remove")
 		return
 	var newcount = search[0].count - item.count
 	if newcount < 0:
-		print("Err")
+		print("Not enough items to remove")
 		return
 	
 	search[0].count = newcount
