@@ -11,7 +11,10 @@ const LIGHT_COLOR: Color = Color("d51010")
 @onready var suit1: Sprite2D = $NumberSuit1/Suit
 @onready var suit2: Sprite2D = $NumberSuit2/Suit
 
-func init(type: CardType, suit: CardSuit) -> void:
+var index: int
+
+func init(type: CardType, suit: CardSuit, index: int) -> void:
+	self.index = index
 	number1.offset.x = 0
 	number1.region_rect.size.x = 3
 	number1.flip_h = false

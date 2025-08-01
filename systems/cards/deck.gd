@@ -26,3 +26,6 @@ func shuffle() -> void:
 
 func draw_card() -> Variant:
 	return self.cards.pop_back()
+
+func add_card(card) -> void:
+	self.cards.insert(0, card)

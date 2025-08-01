@@ -2,5 +2,7 @@ extends Node2D
 
 const Mokepon = MokeponCard.Mokepon
 
-func init(mokepon: Mokepon) -> void:
-	pass
+var index: int
+
+func init(mokepon: Mokepon, index: int) -> void:
+	self.index = index

@@ -10,10 +10,10 @@ func _init() -> void:
 	self.cards = []
 	self.sum = 0
 
-func add_card(card) -> void:
+func add_card(card) -> int:
 	cards.append(card)
 	if not "type" in card:
-		return
+		return len(self.cards) - 1
 	
 	var _sum = self.base_sum
 	
@@ -34,6 +34,15 @@ func add_card(card) -> void:
 		_sum += 10
 	
 	self.sum = _sum
+	
+	return len(self.cards) - 1
+
+func remove_card(index: int) -> Variant:
+	if index >= len(self.cards):
+		return
+	var card = self.cards[index]
+	self.cards[index] = null
+	return card
 
 func has_lost() -> bool:
 	return sum > 21

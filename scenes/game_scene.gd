@@ -2,8 +2,9 @@ extends Node
 
 const CardContainer = preload("res://ui/card_container.gd")
 
-const CARD_SPRITE = preload("res://entities/card/card.tscn")
-const MOKEPON_SPRITE = preload("res://entities/mokepon/mokepon_card.tscn")
+const CARD_SPRITE := preload("res://entities/card/card.tscn")
+const MOKEPON_SPRITE := preload("res://entities/mokepon/mokepon_card.tscn")
+const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
 
 var game_data: GameData
 @onready var player_hand: Hand = Hand.new()
@@ -17,6 +18,8 @@ var game_data: GameData
 var player_turn: bool = true
 
 func _ready() -> void:
+	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
+	
 	self.init(GameData.new())
 	self.game_data.deck.shuffle()
 
@@ -31,8 +34,17 @@ func draw_player_card() -> void:
 	if not player_turn:
 		return
 	
-	var card = self.draw_card(player_hand, player_hand_display, player_lose)
+	var card = self.draw_card(player_hand, player_hand_display)
+	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
+	
+	if player_hand.has_lost():
+		self.player_lose()
+		return
+	if player_hand.sum == 21:
+		self.dealer_lose()
+		return
+	
 	if "mokepon" in card:
 		player_turn = false
 
@@ -46,35 +58,79 @@ func draw_dealer_card() -> void:
 	if player_turn:
 		return
 	
-	var card = self.draw_card(dealer_hand, dealer_hand_display, dealer_lose)
+	var card = self.draw_card(dealer_hand, dealer_hand_display)
+	
 	dealer_hand_total.text = "Total: " + str(dealer_hand.sum)
+	
+	if dealer_hand.has_lost():
+		self.dealer_lose()
+		return
+	
 	if "mokepon" in card:
 		game_data.cheat_meter += 20.0
 
-func draw_card(hand: Hand, card_container: CardContainer, loss_f: Callable) -> Variant:
+func dealer_hold() -> void:
+	if player_turn:
+		return
+	
+	if player_hand.sum > dealer_hand.sum:
+		self.dealer_lose()
+	else:
+		self.player_lose()
+
+func draw_card(hand: Hand, card_container: CardContainer) -> Variant:
 	var card = self.game_data.deck.draw_card()
 	
-	hand.add_card(card)
+	var card_index := hand.add_card(card)
 	
 	var is_mokepon = "mokepon" in card
 	
 	var card_sprite := MOKEPON_SPRITE.instantiate() if is_mokepon else CARD_SPRITE.instantiate()
 	card_container.add_card(card_sprite)
 	if is_mokepon:
-		card_sprite.init(card.mokepon)
+		card_sprite.init(card.mokepon, card_index)
 	else:
-		card_sprite.init(card.type, card.suit)
-	
-	if hand.has_lost():
-		loss_f.call()
-		return card
+		card_sprite.init(card.type, card.suit, card_index)
 	
 	return card
 
-
 func player_lose() -> void:
-	player_turn = false
+	var round_end_menu = ROUND_END_MENU.instantiate()
+	$UI.add_child(round_end_menu)
+	round_end_menu.init(false)
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
+	var round_end_menu = ROUND_END_MENU.instantiate()
+	$UI.add_child(round_end_menu)
+	round_end_menu.init(true)
 	SignalBus.on_dealer_loss.emit()
+
+func game_continue() -> void:
+	pass
+
+func move_card_from_player_hand_to_deck(card_index: int) -> void:
+	var card = player_hand.remove_card(card_index)
+	game_data.deck.add_card(card)
+	
+	var child = self.player_hand_display.get_card_with_index(card_index)
+	
+	if child == null:
+		return
+	
+	child.queue_free()
+
+func move_card_from_player_hand_to_inventory(card_index: int) -> void:
+	var card = player_hand.remove_card(card_index)
+	game_data.inventory.add_item(card)
+	
+	var child = self.player_hand_display.get_card_with_index(card_index)
+	
+	if child == null:
+		return
+	
+	child.queue_free()
+
+func go_to_shop_cleanup() -> void:
+	for card_index in range(len(self.player_hand.cards)):
+		self.move_card_from_player_hand_to_deck(card_index)
