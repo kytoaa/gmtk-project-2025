@@ -20,6 +20,12 @@ var player_turn: bool = true
 func _ready() -> void:
 	self.init(GameData.new())
 	self.game_data.deck.shuffle()
+	#self.game_data.inventory.add_item()
+	#self.game_data.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
+	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
+	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
+	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
 
 func init(game_data: GameData) -> void:
 	self.game_data = game_data

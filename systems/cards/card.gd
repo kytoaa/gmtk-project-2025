@@ -15,12 +15,13 @@ func play_card() -> void:
 		else:
 			self.type = CardType.NUMBER_13
 
-static func build(type: CardType, suit: CardSuit) -> Card:
+static func build(type: CardType, suit: CardSuit, count: int = 1) -> Card:
 	var card = Card.new()
 	card.type = type
 	card.suit = suit
 	card.times_used = 0
 	card.marked = false
+	card.count = count
 	card.itemtype = ItemType.Card
 	return card
 
