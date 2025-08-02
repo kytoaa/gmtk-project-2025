@@ -9,7 +9,6 @@ var drag_location: DragDropLocation = DragDropLocation.INVENTORY
 @onready var data = GameData.inventory
 
 func all_children_recurs(node: Node) -> void:
-	print(node.name)
 	for N in node.get_children():
 		if N.is_class("Control"):
 			N.mouse_filter = MOUSE_FILTER_PASS
@@ -39,7 +38,6 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	return []
 
 func _on_mouse_entered() -> void:
-	print(self.modulate)
 	self.modulate = Color(0.5, 0.5, 0.5)
 	
 func _on_mouse_exited() -> void:

@@ -5,6 +5,7 @@ var cards
 var sum: int
 var base_sum: int          # sum where aces = 1 point
 
+signal hand_empty
 
 func _init() -> void:
 	self.cards = []
@@ -36,17 +37,12 @@ func add_card(card) -> int:
 	
 	return len(self.cards) - 1
 
-func remove_card_at_index(index: int) -> Variant:
-	if index >= len(self.cards):
-		return
-	var card = self.cards[index]
-	self.cards[index] = null
-	return card
-
 func remove_card(card) -> void:
 	var i = self.cards.find_custom(compare_cards.bind(card))
 	if i != -1:
 		self.cards.remove_at(i)
+		if len(self.cards) == 0:
+			self.hand_empty.emit()
 
 func has_lost() -> bool:
 	return sum > 21

@@ -35,6 +35,8 @@ func _ready() -> void:
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	
+	%Inventory.get_child(0).dropped_on_inventory.connect(move_card_from_player_hand_to_inventory)
+	
 	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(
 		func(card, location):
 			match location:
@@ -54,6 +56,7 @@ func _ready() -> void:
 	
 	self.init()
 	GameData.deck.shuffle()
+	GameData.deck.card_count_change.connect(func(count): $UI/SegmentSplitter/RightSide/VBoxContainer/Deck/CardCount.text = str(count))
 	#GameData.inventory.add_item()
 	#GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
@@ -77,10 +80,8 @@ func _process(delta: float) -> void:
 		GameState.RETURN_CARDS:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		draw_dealer_card()
+			if len(GameData.deck.cards) == Deck.MAX_CARDS:
+				$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
 
 func draw_player_card() -> void:
 	if game_state != GameState.PLAYER_TURN:
@@ -164,12 +165,16 @@ func dealer_lose() -> void:
 	SignalBus.on_dealer_loss.emit()
 
 func move_card_from_player_hand_to_deck(card) -> void:
+	print("moved from hand to deck")
 	player_hand.remove_card(card)
 	GameData.deck.add_card(card)
 
 func move_card_from_player_hand_to_inventory(card) -> void:
+	if not (card.itemtype == InventoryItem.ItemType.MokeponCard
+			or card.itemtype == InventoryItem.ItemType.Card):
+		return
+	print("moved from hand to inv")
 	player_hand.remove_card(card)
-	GameData.inventory.add_item(card)
 
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
@@ -186,7 +191,8 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 		return
 
 func move_card_from_inventory_to_deck(card) -> void:
-	if not "suit" in card:
+	if not (card.itemtype == InventoryItem.ItemType.MokeponCard
+			or card.itemtype == InventoryItem.ItemType.Card):
 		return
 	GameData.deck.add_card(card)
 
@@ -196,5 +202,23 @@ func go_to_shop_cleanup() -> void:
 
 func continue_game() -> void:
 	game_state = GameState.RETURN_CARDS
+	
+	for card in self.dealer_hand.cards:
+		GameData.deck.add_card(card)
+	for child in dealer_hand_display.get_children():
+		child.queue_free()
+	
+	self.player_hand.hand_empty.connect(
+		func():
+			print("hand empty")
+			while len(GameData.deck.cards) < Deck.MAX_CARDS:
+				await get_tree().process_frame
+			game_state = GameState.PLAYER_TURN
+			self.player_hand = Hand.new()
+			self.dealer_hand = Hand.new()
+			player_hand_total.text = "Total: " + str(0)
+			dealer_hand_total.text = "Total: " + str(0)
+			GameData.deck.shuffle()
+	)
 	self.round_end_menu.queue_free()
 	self.player_hand_display.convert_to_draggable(self.player_hand.cards)

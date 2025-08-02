@@ -2,6 +2,7 @@ class_name Deck
 extends Resource
 
 signal reached_max_cards
+signal card_count_change(int)
 
 const CardSuit = Card.CardSuit
 const CardType = Card.CardType
@@ -29,9 +30,11 @@ func shuffle() -> void:
 	self.cards.shuffle()
 
 func draw_card() -> Variant:
+	self.card_count_change.emit(len(self.cards) - 1)
 	return self.cards.pop_back()
 
 func add_card(card) -> void:
+	self.card_count_change.emit(len(self.cards) + 1)
 	self.cards.insert(0, card)
 	if len(self.cards) == MAX_CARDS:
 		reached_max_cards.emit()
