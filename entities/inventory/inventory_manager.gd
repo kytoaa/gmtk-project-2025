@@ -41,4 +41,3 @@ func _on_inventory_update() -> void:
 			container.add_card(card)
 			itemholder.add_item(item, container)
 			card.init(item.mokepon)
-	

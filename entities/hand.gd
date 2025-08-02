@@ -36,12 +36,25 @@ func add_card(card) -> int:
 	
 	return len(self.cards) - 1
 
-func remove_card(index: int) -> Variant:
+func remove_card_at_index(index: int) -> Variant:
 	if index >= len(self.cards):
 		return
 	var card = self.cards[index]
 	self.cards[index] = null
 	return card
 
+func remove_card(card) -> void:
+	var i = self.cards.find_custom(compare_cards.bind(card))
+	if i != -1:
+		self.cards.remove_at(i)
+
 func has_lost() -> bool:
 	return sum > 21
+
+static func compare_cards(card, card2) -> bool:
+	if "type" in card and "type" in card2:
+		return card2.type == card.type and card2.suit == card.suit
+	elif "mokepon" in card and "mokepon" in card2:
+		return card2.mokepon == card.mokepon
+	else:
+		return false

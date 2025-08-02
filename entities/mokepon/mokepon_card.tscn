@@ -3,12 +3,15 @@
 [ext_resource type="Texture2D" uid="uid://c7y3x281uxm2t" path="res://entities/card/sprites/base_card.png" id="1_011s1"]
 [ext_resource type="Script" uid="uid://ba1j6lwit5pex" path="res://entities/mokepon/mokepon_card.gd" id="1_nqqu7"]
 
-[node name="MokeponCard" type="Node2D"]
+[node name="MokeponCard" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_nqqu7")
 
 [node name="Background" type="Sprite2D" parent="."]
 self_modulate = Color(0.130772, 0.130772, 0.130772, 1)
 clip_children = 2
+position = Vector2(-10, 0)
 texture = ExtResource("1_011s1")
 
 [node name="Mokepon" type="Sprite2D" parent="Background"]

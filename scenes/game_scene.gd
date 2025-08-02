@@ -6,6 +6,18 @@ const CARD_SPRITE := preload("res://entities/card/card.tscn")
 const MOKEPON_SPRITE := preload("res://entities/mokepon/mokepon_card.tscn")
 const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
 
+enum DragDropLocation {
+	HAND,
+	DECK,
+	INVENTORY,
+}
+
+enum GameState {
+	PLAYER_TURN,
+	OPPONENT_TURN,
+	RETURN_CARDS,
+}
+
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
 
@@ -15,12 +27,30 @@ const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
 @onready var dealer_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/TotalDisplay
 @onready var inventory: Control = %Inventory
 
-var player_turn: bool = true
+var game_state: GameState = GameState.PLAYER_TURN
+
+var round_end_menu: Node
 
 func _ready() -> void:
-	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(move_card_from_inventory_to_player_hand)
-	$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.on_drop_card.connect(move_card_from_inventory_to_deck)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
+	SignalBus.continue_game.connect(continue_game)
+	
+	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(
+		func(card, location):
+			match location:
+				DragDropLocation.INVENTORY:
+					move_card_from_inventory_to_player_hand(card)
+				_: printerr("dragged from ", location, " to hand")
+	)
+	$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.on_drop_card.connect(
+		func(card, location):
+			match location:
+				DragDropLocation.HAND:
+					move_card_from_player_hand_to_deck(card)
+				DragDropLocation.INVENTORY:
+					move_card_from_inventory_to_deck(card)
+				_: printerr("dragged from ", location, " to deck")
+	)
 	
 	self.init()
 	GameData.deck.shuffle()
@@ -30,17 +60,30 @@ func _ready() -> void:
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
 
 func init() -> void:
 	GameData.init()
 	self.inventory.init()
+
+func _process(delta: float) -> void:
+	match game_state:
+		GameState.PLAYER_TURN:
+			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
+		GameState.OPPONENT_TURN:
+			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
+		GameState.RETURN_CARDS:
+			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		draw_dealer_card()
 
 func draw_player_card() -> void:
-	if not player_turn:
+	if game_state != GameState.PLAYER_TURN:
 		return
 	
 	var card = self.draw_card(player_hand, player_hand_display)
@@ -55,16 +98,16 @@ func draw_player_card() -> void:
 		return
 	
 	if "mokepon" in card:
-		player_turn = false
+		game_state = GameState.OPPONENT_TURN
 
 func player_hold() -> void:
-	if not player_turn:
+	if game_state != GameState.PLAYER_TURN:
 		return
 	
-	player_turn = false
+	game_state = GameState.OPPONENT_TURN
 
 func draw_dealer_card() -> void:
-	if player_turn:
+	if game_state != GameState.OPPONENT_TURN:
 		return
 	
 	var card = self.draw_card(dealer_hand, dealer_hand_display)
@@ -79,7 +122,7 @@ func draw_dealer_card() -> void:
 		GameData.cheat_meter += 20.0
 
 func dealer_hold() -> void:
-	if player_turn:
+	if game_state != GameState.OPPONENT_TURN:
 		return
 	
 	if player_hand.sum > dealer_hand.sum:
@@ -110,38 +153,23 @@ func player_lose() -> void:
 	var round_end_menu = ROUND_END_MENU.instantiate()
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(false)
+	self.round_end_menu = round_end_menu
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
 	var round_end_menu = ROUND_END_MENU.instantiate()
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(true)
+	self.round_end_menu = round_end_menu
 	SignalBus.on_dealer_loss.emit()
 
-func game_continue() -> void:
-	pass
-
-func move_card_from_player_hand_to_deck(card_index: int) -> void:
-	var card = player_hand.remove_card(card_index)
+func move_card_from_player_hand_to_deck(card) -> void:
+	player_hand.remove_card(card)
 	GameData.deck.add_card(card)
-	
-	var child = self.player_hand_display.get_card_with_index(card_index)
-	
-	if child == null:
-		return
-	
-	child.queue_free()
 
-func move_card_from_player_hand_to_inventory(card_index: int) -> void:
-	var card = player_hand.remove_card(card_index)
+func move_card_from_player_hand_to_inventory(card) -> void:
+	player_hand.remove_card(card)
 	GameData.inventory.add_item(card)
-	
-	var child = self.player_hand_display.get_card_with_index(card_index)
-	
-	if child == null:
-		return
-	
-	child.queue_free()
 
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
@@ -163,5 +191,10 @@ func move_card_from_inventory_to_deck(card) -> void:
 	GameData.deck.add_card(card)
 
 func go_to_shop_cleanup() -> void:
-	for card_index in range(len(self.player_hand.cards)):
-		self.move_card_from_player_hand_to_deck(card_index)
+	for card in self.player_hand.cards:
+		self.move_card_from_player_hand_to_deck(card)
+
+func continue_game() -> void:
+	game_state = GameState.RETURN_CARDS
+	self.round_end_menu.queue_free()
+	self.player_hand_display.convert_to_draggable(self.player_hand.cards)

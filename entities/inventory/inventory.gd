@@ -30,7 +30,7 @@ func add_item(item: InventoryItem) -> void:
 func remove_item(item: InventoryItem) -> void:
 	var index: int = items.find(
 		items.filter(func(it): return should_share_slot(it, item))[0]
-		)
+	)
 	var search = items.filter(func(it): return should_share_slot(it, item))
 	
 	if len(search) == 0:
