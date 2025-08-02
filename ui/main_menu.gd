@@ -1,7 +1,8 @@
 extends Control
 
 func on_start_game_pressed():
-	pass
+	GameData.init()
+	NavigationManager.go_to_scene(SceneList.game())
 
 func on_settings_pressed():
 	NavigationManager.go_to_scene(SceneList.settings_menu())

@@ -27,6 +27,7 @@ const dialogue_options: Array[String] = [
 func _ready() -> void:
 	mokepon_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.MokeponPack])
 	bariho_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.BarihoGummies])
+	%Inventory.init()
 
 func _process(_delta: float) -> void:
 	if cant_pay_for:
@@ -81,3 +82,6 @@ func _on_texture_rect_2_mouse_entered() -> void:
 func _on_texture_rect_2_mouse_exited() -> void:
 	mouseover_bariho = false
 	cant_pay_for = false
+
+func back_to_game() -> void:
+	NavigationManager.go_to_scene(SceneList.game())

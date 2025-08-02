@@ -60,21 +60,8 @@ func _ready() -> void:
 	self.init()
 	GameData.deck.shuffle()
 	GameData.deck.card_count_change.connect(func(count): $UI/SegmentSplitter/RightSide/VBoxContainer/Deck/CardCount.text = str(count))
-	#GameData.inventory.add_item()
-	#GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
-	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
-	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
-	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
-	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
-	for i in range(20):
-		GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
-	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
-	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Green, 1))
-	GameData.inventory.add_item(Chip.new(Chip.Colour.Black, 2))
-	GameData.inventory.add_item(Chip.new(Chip.Colour.White, 2))
 
 func init() -> void:
-	GameData.init()
 	self.inventory.init()
 
 func _process(delta: float) -> void:
@@ -231,6 +218,8 @@ func move_card_from_inventory_to_deck(card) -> void:
 func go_to_shop_cleanup() -> void:
 	for card in self.player_hand.cards:
 		self.move_card_from_player_hand_to_deck(card)
+	
+	NavigationManager.go_to_scene(SceneList.shop())
 
 func continue_game() -> void:
 	game_state = GameState.RETURN_CARDS

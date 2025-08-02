@@ -6,3 +6,9 @@ static func main_menu() -> PackedScene:
 
 static func settings_menu() -> PackedScene:
 	return preload("res://ui/settings.tscn")
+
+static func game() -> PackedScene:
+	return preload("res://scenes/game_scene.tscn")
+
+static func shop() -> PackedScene:
+	return preload("res://systems/shop/shop.tscn")
