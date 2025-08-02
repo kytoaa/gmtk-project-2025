@@ -25,6 +25,7 @@ const dialogue_options: Array[String] = [
 ]
 
 func _ready() -> void:
+	GameData.push_popup_queue(10)
 	mokepon_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.MokeponPack])
 	bariho_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.BarihoGummies])
 

@@ -10,6 +10,8 @@ func play_card() -> void:
 	self.times_used += 1
 	
 	if self.type == CardType.NUMBER_11 && self.times_used == 2:
+		GameData.push_popup_queue(3)
+		GameData.push_popup_queue(4)
 		if randi() % 2 == 0:
 			self.type = CardType.NUMBER_12
 		else:

@@ -35,6 +35,8 @@ var dealer_can_play: bool = true
 var round_end_menu: Node
 
 func _ready() -> void:
+	if randf() < 0.1:
+		GameData.push_popup_queue(11)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	
@@ -68,6 +70,8 @@ func _ready() -> void:
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
 	for i in range(20):
 		GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.Waarizard))
+	GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.Pigglyjuff))
 	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
 	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Green, 1))
 	GameData.inventory.add_item(Chip.new(Chip.Colour.Black, 2))
@@ -80,6 +84,7 @@ func init() -> void:
 func _process(delta: float) -> void:
 	match game_state:
 		GameState.PLAYER_TURN:
+			GameData.push_popup_queue(0)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
 		GameState.OPPONENT_TURN:

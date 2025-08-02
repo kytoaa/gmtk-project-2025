@@ -14,7 +14,26 @@ func _init() -> void:
 func add_card(card) -> int:
 	cards.append(card)
 	if not "type" in card:
+		GameData.push_popup_queue(7)
 		return len(self.cards) - 1
+	
+	if card.type == Card.CardType.NUMBER_13:
+		GameData.inventory.add_item(Chip.new(50))
+		GameData.push_popup_queue(6)
+	if card.suit == Card.CardSuit.DIAMONDS:
+		GameData.push_popup_queue(12)
+	if card.suit == Card.CardSuit.HEARTS and cards[len(cards)-1].suit == Card.CardSuit.HEARTS:
+		GameData.push_popup_queue(13)
+		cards.pop_back()
+		var removed: Card = cards.pop_back()
+		match removed.type:
+			Card.CardType.NUMBER_11, Card.CardType.NUMBER_12, Card.CardType.NUMBER_13:
+				self.base_sum -= 10
+			Card.CardType.NUMBER_1:
+				self.base_sum -= 1
+			_:
+				self.base_sum -= int(card.type)
+		cards.append(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.HEARTS))
 	
 	var _sum = self.base_sum
 	var hand_has_ace = (cards.find_custom(func(card): return "type" in card and card.type == Card.CardType.NUMBER_1) != -1)
@@ -32,6 +51,9 @@ func add_card(card) -> int:
 	print("has ace")
 	if hand_has_ace and !hand_has_eight:
 		_sum += 10
+	
+	if hand_has_ace and hand_has_eight:
+		GameData.push_popup_queue(5)
 	
 	self.sum = _sum
 	

@@ -25,6 +25,15 @@ func add_item(item: InventoryItem) -> void:
 		items.append(item)
 	else:
 		search[0].count += item.count
+	
+	if item.itemtype == InventoryItem.ItemType.GummyBear:
+		if !GameData.rules[1].revealed:
+			GameData.push_popup_queue(1)
+		elif randf() < 0.1:
+			GameData.push_popup_queue(2)
+	
+	if item.itemtype == InventoryItem.ItemType.MokeponCard and item.mokepon == MokeponCard.Mokepon.Waarizard:
+		GameData.push_popup_queue(9)
 	self.updated.emit()
 
 func remove_item(item: InventoryItem) -> void:
