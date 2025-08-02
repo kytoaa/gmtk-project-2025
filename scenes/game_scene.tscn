@@ -202,9 +202,10 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 50
 
-[node name="ProgressBar" type="ProgressBar" parent="UI/SegmentSplitter/RightSide/CheatMeterMargin"]
+[node name="CheatMeter" type="ProgressBar" parent="UI/SegmentSplitter/RightSide/CheatMeterMargin"]
 layout_mode = 2
 size_flags_vertical = 1
+value = 20.0
 fill_mode = 3
 show_percentage = false
 

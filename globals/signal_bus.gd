@@ -1,8 +1,10 @@
 extends Node
 
+const LossReason = GameData.LossReason
+
 signal on_player_loss
 signal on_dealer_loss
-signal on_game_end
+signal on_game_end(LossReason)
 
 signal continue_game
 signal go_to_shop

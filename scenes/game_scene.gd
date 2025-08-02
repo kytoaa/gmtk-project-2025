@@ -60,6 +60,7 @@ func _ready() -> void:
 	self.init()
 	GameData.deck.shuffle()
 	GameData.deck.card_count_change.connect(func(count): $UI/SegmentSplitter/RightSide/VBoxContainer/Deck/CardCount.text = str(count))
+	GameData.cheat_meter_changed.connect(func(value): $UI/SegmentSplitter/RightSide/CheatMeterMargin/CheatMeter.set_value_no_signal(float(value)))
 
 func init() -> void:
 	self.inventory.init()
@@ -171,6 +172,7 @@ func player_lose() -> void:
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(false)
 	self.round_end_menu = round_end_menu
+	GameData.cheat_meter -= 15
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
@@ -181,6 +183,7 @@ func dealer_lose() -> void:
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(true)
 	self.round_end_menu = round_end_menu
+	GameData.cheat_meter -= 5
 	SignalBus.on_dealer_loss.emit()
 
 func move_card_from_player_hand_to_deck(card) -> void:
@@ -194,6 +197,7 @@ func move_card_from_player_hand_to_inventory(card) -> void:
 		return
 	print("moved from hand to inv")
 	player_hand.remove_card(card)
+	GameData.cheat_meter += 2
 
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
@@ -201,6 +205,8 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 	self.add_card_to_hand(player_hand, player_hand_display, card)
 	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
+	
+	GameData.cheat_meter += 5
 	
 	if player_hand.has_lost():
 		self.player_lose()
@@ -214,6 +220,7 @@ func move_card_from_inventory_to_deck(card) -> void:
 			or card.itemtype == InventoryItem.ItemType.Card):
 		return
 	GameData.deck.add_card(card)
+	GameData.cheat_meter += 2
 
 func go_to_shop_cleanup() -> void:
 	for card in self.player_hand.cards:
