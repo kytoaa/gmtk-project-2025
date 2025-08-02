@@ -6,3 +6,6 @@ signal on_game_end
 
 signal continue_game
 signal go_to_shop
+
+signal on_scene_transition_finished
+signal on_scene_transition_fade_to_black

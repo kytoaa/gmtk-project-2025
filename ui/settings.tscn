@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://bq406r2elct1v"]
+
+[ext_resource type="Script" uid="uid://bs1vmsrc2v8lh" path="res://ui/settings.gd" id="1_7kwmf"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7kwmf")
+
+[node name="SfxPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Sfx"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Music"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.190762, 0.190762, 0.190762, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_right = 256
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="GridContainer2" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+columns = 2
+
+[node name="MasterLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Master Volume"
+horizontal_alignment = 1
+
+[node name="MasterVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.025
+value = 0.5
+ticks_on_borders = true
+
+[node name="SfxLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Sound Effects Volume"
+horizontal_alignment = 1
+
+[node name="SfxVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+max_value = 1.0
+step = 0.025
+value = 0.5
+
+[node name="MusicLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+text = "Music Volume"
+horizontal_alignment = 1
+
+[node name="MusicVolume" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+max_value = 1.0
+step = 0.025
+value = 0.5
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "back"
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/MasterVolume" to="." method="on_master_volume_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/SfxVolume" to="." method="on_sfx_volume_changed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer2/MusicVolume" to="." method="on_music_volume_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="on_back_pressed"]
