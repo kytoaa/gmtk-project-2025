@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://yeblegebcn2r"]
+
+[ext_resource type="Script" uid="uid://bxgkkykbcx2wn" path="res://entities/gummy_bear/gummy_bear.gd" id="1_3cc86"]
+[ext_resource type="Texture2D" uid="uid://bf7p0ag1nav36" path="res://entities/gummy_bear/gummy_bears.png" id="2_h823w"]
+
+[node name="GummyBear" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3cc86")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-10, 0)
+texture = ExtResource("2_h823w")
+region_enabled = true
+region_rect = Rect2(0, 0, 12, 19)
