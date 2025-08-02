@@ -12,5 +12,3 @@ clip_children = 2
 texture = ExtResource("1_011s1")
 
 [node name="Mokepon" type="Sprite2D" parent="Background"]
-
-[node name="Camera2D" type="Camera2D" parent="."]
