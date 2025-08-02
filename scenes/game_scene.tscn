@@ -50,6 +50,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="TotalDisplay" type="Label" parent="UI/SegmentSplitter/VBoxContainer2/OpponentCards"]
+layout_mode = 0
 offset_top = 100.0
 offset_right = 320.0
 offset_bottom = 116.0

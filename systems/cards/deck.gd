@@ -1,8 +1,12 @@
 class_name Deck
 extends Resource
 
+signal reached_max_cards
+
 const CardSuit = Card.CardSuit
 const CardType = Card.CardType
+
+const MAX_CARDS := 52
 
 var cards: Array
 
@@ -29,3 +33,5 @@ func draw_card() -> Variant:
 
 func add_card(card) -> void:
 	self.cards.insert(0, card)
+	if len(self.cards) == MAX_CARDS:
+		reached_max_cards.emit()

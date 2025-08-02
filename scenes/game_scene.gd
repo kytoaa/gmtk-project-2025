@@ -80,7 +80,10 @@ func dealer_hold() -> void:
 
 func draw_card(hand: Hand, card_container: CardContainer) -> Variant:
 	var card = self.game_data.deck.draw_card()
-	
+	return self.add_card_to_hand(hand, card_container, card)
+
+
+func add_card_to_hand(hand: Hand, card_container: CardContainer, card) -> Variant:
 	var card_index := hand.add_card(card)
 	
 	var is_mokepon = "mokepon" in card
@@ -130,6 +133,27 @@ func move_card_from_player_hand_to_inventory(card_index: int) -> void:
 		return
 	
 	child.queue_free()
+
+func move_card_from_inventory_to_player_hand(card) -> void:
+	if not "suit" in card:
+		return
+	game_data.inventory.remove_item(card)
+	self.add_card_to_hand(player_hand, player_hand_display, card)
+	
+	player_hand_total.text = "Total: " + str(player_hand.sum)
+	
+	if player_hand.has_lost():
+		self.player_lose()
+		return
+	if player_hand.sum == 21:
+		self.dealer_lose()
+		return
+
+func move_card_from_inventory_to_deck(card) -> void:
+	if not "suit" in card:
+		return
+	game_data.inventory.remove_item(card)
+	game_data.deck.add_card(card)
 
 func go_to_shop_cleanup() -> void:
 	for card_index in range(len(self.player_hand.cards)):
