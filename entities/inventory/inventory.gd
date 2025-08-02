@@ -2,6 +2,7 @@ class_name Inventory
 extends Resource
 
 var items: Array[InventoryItem]
+signal updated
 
 func should_share_slot(item1: InventoryItem, item2: InventoryItem) -> bool:
 	if item1.itemtype != item2.itemtype:
@@ -24,6 +25,7 @@ func add_item(item: InventoryItem) -> void:
 		items.append(item)
 	else:
 		search[0].count += item.count
+	self.updated.emit()
 
 func remove_item(item: InventoryItem) -> void:
 	var index: int = items.find(
@@ -32,14 +34,15 @@ func remove_item(item: InventoryItem) -> void:
 	var search = items.filter(func(it): return should_share_slot(it, item))
 	
 	if len(search) == 0:
-		print("Err")
+		printerr("Item not here to remove")
 		return
 	var newcount = search[0].count - item.count
 	if newcount < 0:
-		print("Err")
+		print("Not enough items to remove")
 		return
 	
 	search[0].count = newcount
+	self.updated.emit()
 
 func money() -> int:
 	var sum: int = 0

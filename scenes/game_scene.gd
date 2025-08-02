@@ -6,7 +6,6 @@ const CARD_SPRITE := preload("res://entities/card/card.tscn")
 const MOKEPON_SPRITE := preload("res://entities/mokepon/mokepon_card.tscn")
 const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
 
-var game_data: GameData
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
 
@@ -14,17 +13,25 @@ var game_data: GameData
 @onready var player_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/PlayerCards/TotalDisplay
 @onready var dealer_hand_display: CardContainer = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/MarginContainer/CardContainer
 @onready var dealer_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/TotalDisplay
+@onready var inventory: Control = %Inventory
 
 var player_turn: bool = true
 
 func _ready() -> void:
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	
-	self.init(GameData.new())
-	self.game_data.deck.shuffle()
+	self.init()
+	GameData.deck.shuffle()
+	#GameData.inventory.add_item()
+	#GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
 
-func init(game_data: GameData) -> void:
-	self.game_data = game_data
+func init() -> void:
+	GameData.init()
+	self.inventory.init()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -67,7 +74,7 @@ func draw_dealer_card() -> void:
 		return
 	
 	if "mokepon" in card:
-		game_data.cheat_meter += 20.0
+		GameData.cheat_meter += 20.0
 
 func dealer_hold() -> void:
 	if player_turn:
@@ -79,7 +86,7 @@ func dealer_hold() -> void:
 		self.player_lose()
 
 func draw_card(hand: Hand, card_container: CardContainer) -> Variant:
-	var card = self.game_data.deck.draw_card()
+	var card = GameData.deck.draw_card()
 	return self.add_card_to_hand(hand, card_container, card)
 
 
@@ -114,7 +121,7 @@ func game_continue() -> void:
 
 func move_card_from_player_hand_to_deck(card_index: int) -> void:
 	var card = player_hand.remove_card(card_index)
-	game_data.deck.add_card(card)
+	GameData.deck.add_card(card)
 	
 	var child = self.player_hand_display.get_card_with_index(card_index)
 	
@@ -125,7 +132,7 @@ func move_card_from_player_hand_to_deck(card_index: int) -> void:
 
 func move_card_from_player_hand_to_inventory(card_index: int) -> void:
 	var card = player_hand.remove_card(card_index)
-	game_data.inventory.add_item(card)
+	GameData.inventory.add_item(card)
 	
 	var child = self.player_hand_display.get_card_with_index(card_index)
 	
@@ -137,7 +144,7 @@ func move_card_from_player_hand_to_inventory(card_index: int) -> void:
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
 		return
-	game_data.inventory.remove_item(card)
+	GameData.inventory.remove_item(card)
 	self.add_card_to_hand(player_hand, player_hand_display, card)
 	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
@@ -152,8 +159,8 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 func move_card_from_inventory_to_deck(card) -> void:
 	if not "suit" in card:
 		return
-	game_data.inventory.remove_item(card)
-	game_data.deck.add_card(card)
+	GameData.inventory.remove_item(card)
+	GameData.deck.add_card(card)
 
 func go_to_shop_cleanup() -> void:
 	for card_index in range(len(self.player_hand.cards)):
