@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://b8ec0yxtxcf7m"]
+[gd_scene load_steps=11 format=3 uid="uid://b8ec0yxtxcf7m"]
 
 [ext_resource type="Script" uid="uid://7gi847m676j0" path="res://scenes/game_scene.gd" id="1_onqr8"]
 [ext_resource type="PackedScene" uid="uid://c5kdjgda0ialo" path="res://entities/inventory/inventory.tscn" id="2_bw6k5"]
 [ext_resource type="PackedScene" uid="uid://boxjjraa7skxm" path="res://ui/card_container.tscn" id="2_ycayy"]
 [ext_resource type="Texture2D" uid="uid://cdn55de6hqtk7" path="res://ui/deck.png" id="3_ycayy"]
+[ext_resource type="Script" uid="uid://dnbx7h2pg6kxd" path="res://entities/pot/pot.gd" id="4_y3j0m"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ycayy"]
 
@@ -81,10 +82,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer"]
+[node name="Pot" type="ColorRect" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0, 0, 0, 1)
+script = ExtResource("4_y3j0m")
 
 [node name="Control" type="Control" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer"]
 layout_mode = 2

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://brri6wkix8o5m"]
 
 [ext_resource type="Script" uid="uid://dxy6ih4p7fsvw" path="res://entities/inventory/inventory_container.gd" id="1_fj7tb"]
-[ext_resource type="Script" uid="uid://cu2ffobvuwqoi" path="res://entities/inventory/item_dragger.gd" id="2_bla28"]
+[ext_resource type="PackedScene" uid="uid://c34ivqigxhxnv" path="res://entities/inventory/item_holder.tscn" id="2_bla28"]
 
 [node name="InventoryContainer" type="VBoxContainer"]
 custom_minimum_size = Vector2(40, 66)
@@ -13,11 +13,8 @@ grow_vertical = 2
 alignment = 1
 script = ExtResource("1_fj7tb")
 
-[node name="ItemHolder" type="Control" parent="."]
-custom_minimum_size = Vector2(40, 56)
+[node name="ItemHolder" parent="." instance=ExtResource("2_bla28")]
 layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("2_bla28")
 
 [node name="Label" type="Label" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -29,5 +26,3 @@ text = "X10"
 
 [connection signal="mouse_entered" from="." to="." method="_on_item_holder_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_item_holder_mouse_exited"]
-[connection signal="mouse_entered" from="ItemHolder" to="ItemHolder" method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="ItemHolder" to="ItemHolder" method="_on_mouse_exited"]

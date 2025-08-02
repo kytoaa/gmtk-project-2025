@@ -9,27 +9,28 @@ const INVENTORY_CONTAINER_SCENE = preload("res://entities/inventory/inventory_co
 
 @onready var grid: GridContainer = $ColorRect/MarginContainer/GridContainer
 
-var game_data: GameData
 var initialised: bool = false
 
-func init(gd: GameData) -> void:
+func init() -> void:
 	self.initialised = true
-	self.game_data = gd
+	GameData.inventory.updated.connect(_on_inventory_update)
+	_on_inventory_update()
 
 func _process(delta: float) -> void:
 	if not initialised:
 		return
-	
+
+func _on_inventory_update() -> void:
 	for obj in grid.get_children():
 		obj.queue_free()
-	for item in game_data.inventory.items:
+	print(len(GameData.inventory.items))
+	for item in GameData.inventory.items:
 		if item.itemtype == InventoryItem.ItemType.Card:
 			var card = CARD_SCENE.instantiate()
 			var container = CONTAINER_SCENE.instantiate()
-			container.add_card(card)
 			var itemholder = INVENTORY_CONTAINER_SCENE.instantiate()
 			self.grid.add_child(itemholder)
+			container.add_card(card)
 			itemholder.add_item(item, container)
 			card.init(item.type, item.suit)
-	initialised = false # to prevent it running every frame
-	# ideally, this is in a function that is activated by signal when the inventory is updated
+	

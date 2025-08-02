@@ -5,7 +5,6 @@ const CardContainer = preload("res://ui/card_container.gd")
 const CARD_SPRITE = preload("res://entities/card/card.tscn")
 const MOKEPON_SPRITE = preload("res://entities/mokepon/mokepon_card.tscn")
 
-var game_data: GameData
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
 
@@ -18,18 +17,18 @@ var game_data: GameData
 var player_turn: bool = true
 
 func _ready() -> void:
-	self.init(GameData.new())
-	self.game_data.deck.shuffle()
-	#self.game_data.inventory.add_item()
-	#self.game_data.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
-	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
-	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
-	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
-	self.game_data.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
+	self.init()
+	GameData.deck.shuffle()
+	#GameData.inventory.add_item()
+	#GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
+	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
 
-func init(game_data: GameData) -> void:
-	self.game_data = game_data
-	self.inventory.init(game_data)
+func init() -> void:
+	GameData.init()
+	self.inventory.init()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
@@ -57,10 +56,10 @@ func draw_dealer_card() -> void:
 	var card = self.draw_card(dealer_hand, dealer_hand_display, dealer_lose)
 	dealer_hand_total.text = "Total: " + str(dealer_hand.sum)
 	if "mokepon" in card:
-		game_data.cheat_meter += 20.0
+		GameData.cheat_meter += 20.0
 
 func draw_card(hand: Hand, card_container: CardContainer, loss_f: Callable) -> Variant:
-	var card = self.game_data.deck.draw_card()
+	var card = GameData.deck.draw_card()
 	
 	hand.add_card(card)
 	
