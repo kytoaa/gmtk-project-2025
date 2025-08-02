@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 const CardType = Card.CardType
 const CardSuit = Card.CardSuit

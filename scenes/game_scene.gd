@@ -13,6 +13,7 @@ var game_data: GameData
 @onready var player_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/PlayerCards/TotalDisplay
 @onready var dealer_hand_display: CardContainer = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/MarginContainer/CardContainer
 @onready var dealer_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/TotalDisplay
+@onready var inventory: Control = %Inventory
 
 var player_turn: bool = true
 
@@ -22,6 +23,7 @@ func _ready() -> void:
 
 func init(game_data: GameData) -> void:
 	self.game_data = game_data
+	self.inventory.init(game_data)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
