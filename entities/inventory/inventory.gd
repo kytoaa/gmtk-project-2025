@@ -48,10 +48,19 @@ func remove_item(item: InventoryItem) -> void:
 	search[0].count = newcount
 	self.updated.emit()
 
-func money() -> int:
+func money(include_other: bool = false) -> int:
 	var sum: int = 0
 	for item in self.items:
 		if item.itemtype == InventoryItem.ItemType.Chip:
+			sum += item.colour * item.count
+		if include_other and (item.itemtype == InventoryItem.ItemType.Card):
+			match item.suit:
+				Card.CardSuit.HEARTS, Card.CardSuit.DIAMONDS:
+					sum += Chip.Colour.Red * item.count
+				Card.CardSuit.SPADES, Card.CardSuit.CLUBS:
+					sum += Chip.Colour.Blue * item.count
+		if include_other and (item.itemtype == InventoryItem.ItemType.GummyBear) \
+		and item.colour in GummyBear.BET_COLOURS:
 			sum += item.colour * item.count
 	return sum
 
