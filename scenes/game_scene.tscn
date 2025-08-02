@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b8ec0yxtxcf7m"]
+[gd_scene load_steps=13 format=3 uid="uid://b8ec0yxtxcf7m"]
 
 [ext_resource type="Script" uid="uid://7gi847m676j0" path="res://scenes/game_scene.gd" id="1_onqr8"]
 [ext_resource type="PackedScene" uid="uid://c5kdjgda0ialo" path="res://entities/inventory/inventory.tscn" id="2_bw6k5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cdn55de6hqtk7" path="res://ui/deck.png" id="3_ycayy"]
 [ext_resource type="Script" uid="uid://dnbx7h2pg6kxd" path="res://entities/pot/pot.gd" id="4_y3j0m"]
 [ext_resource type="Script" uid="uid://cpa5ldy8gdk3a" path="res://scenes/card_container_drop.gd" id="5_rurhu"]
+[ext_resource type="Script" uid="uid://dyy6snk0rau5x" path="res://ui/deck_drop.gd" id="7_kk2rg"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ycayy"]
 
@@ -165,6 +166,7 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_kk2rg")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ycayy")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_kk2rg")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_b5spy")
+script = ExtResource("7_kk2rg")
 
 [node name="Button" type="Button" parent="UI/SegmentSplitter/RightSide/VBoxContainer/Deck"]
 layout_mode = 0

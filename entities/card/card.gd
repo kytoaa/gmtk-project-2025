@@ -13,7 +13,7 @@ const LIGHT_COLOR: Color = Color("d51010")
 
 var index: int
 
-func init(type: CardType, suit: CardSuit, index: int) -> void:
+func init(type: CardType, suit: CardSuit, index: int = 0) -> void:
 	self.index = index
 	number1.offset.x = 0
 	number1.region_rect.size.x = 3

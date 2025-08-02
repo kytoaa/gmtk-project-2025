@@ -18,6 +18,8 @@ const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
 var player_turn: bool = true
 
 func _ready() -> void:
+	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(move_card_from_inventory_to_player_hand)
+	$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.on_drop_card.connect(move_card_from_inventory_to_deck)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	
 	self.init()
@@ -144,7 +146,6 @@ func move_card_from_player_hand_to_inventory(card_index: int) -> void:
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
 		return
-	GameData.inventory.remove_item(card)
 	self.add_card_to_hand(player_hand, player_hand_display, card)
 	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
@@ -159,7 +160,6 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 func move_card_from_inventory_to_deck(card) -> void:
 	if not "suit" in card:
 		return
-	GameData.inventory.remove_item(card)
 	GameData.deck.add_card(card)
 
 func go_to_shop_cleanup() -> void:

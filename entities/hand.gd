@@ -16,8 +16,7 @@ func add_card(card) -> int:
 		return len(self.cards) - 1
 	
 	var _sum = self.base_sum
-	
-	var hand_has_ace = (cards.find(Card.CardType.NUMBER_1) != -1)
+	var hand_has_ace = (cards.find_custom(func(card): return "type" in card and card.type == Card.CardType.NUMBER_1) != -1)
 	match card.type:
 		Card.CardType.NUMBER_11, Card.CardType.NUMBER_12, Card.CardType.NUMBER_13:
 			_sum += 10
@@ -28,8 +27,8 @@ func add_card(card) -> int:
 			_sum += int(card.type)
 	self.base_sum = _sum
 	
-	var hand_has_eight = (cards.find(Card.CardType.NUMBER_8) != -1)
-	
+	var hand_has_eight = (cards.find_custom(func(card): return "type" in card and card.type == Card.CardType.NUMBER_8) != -1)
+	print("has ace")
 	if hand_has_ace and !hand_has_eight:
 		_sum += 10
 	
