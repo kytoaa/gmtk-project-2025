@@ -3,8 +3,8 @@ extends Control
 const CardType = Card.CardType
 const CardSuit = Card.CardSuit
 
-const DARK_COLOR: Color = Color("0f0030")
-const LIGHT_COLOR: Color = Color("d51010")
+const DARK_COLOR: Color = Color("5c65d9")
+const LIGHT_COLOR: Color = Color("df3838")
 
 @onready var number1: Sprite2D = $NumberSuit1/Number
 @onready var number2: Sprite2D = $NumberSuit2/Number

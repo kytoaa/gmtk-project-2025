@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh824bwt28yio"]
+
+[ext_resource type="Texture2D" uid="uid://db45kbvga1iyd" path="res://entities/chip/chips.png" id="1_fpp85"]
+[ext_resource type="Script" uid="uid://c3gl1we75v5b2" path="res://entities/chip/chip.gd" id="1_ow7ax"]
+
+[node name="Chip" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ow7ax")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-10, 0)
+texture = ExtResource("1_fpp85")
+region_enabled = true
+region_rect = Rect2(0, 0, 28, 19)
