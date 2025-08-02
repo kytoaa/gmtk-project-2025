@@ -40,6 +40,10 @@ func remove_item(item: InventoryItem) -> void:
 	if newcount < 0:
 		print("Not enough items to remove")
 		return
+	elif newcount == 0:
+		items.remove_at(items.find(search[0]))
+		self.updated.emit()
+		return
 	
 	search[0].count = newcount
 	self.updated.emit()

@@ -16,6 +16,7 @@ enum GameState {
 	PLAYER_TURN,
 	OPPONENT_TURN,
 	RETURN_CARDS,
+	MENU,
 }
 
 @onready var player_hand: Hand = Hand.new()
@@ -28,6 +29,8 @@ enum GameState {
 @onready var inventory: Control = %Inventory
 
 var game_state: GameState = GameState.PLAYER_TURN
+
+var dealer_can_play: bool = true
 
 var round_end_menu: Node
 
@@ -63,7 +66,8 @@ func _ready() -> void:
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.SPADES))
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_3, Card.CardSuit.SPADES))
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
-	GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	for i in range(20):
+		GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
 
 func init() -> void:
 	GameData.init()
@@ -77,11 +81,27 @@ func _process(delta: float) -> void:
 		GameState.OPPONENT_TURN:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
+			if dealer_can_play:
+				dealer_turn()
+		GameState.MENU:
+			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 		GameState.RETURN_CARDS:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			if len(GameData.deck.cards) == Deck.MAX_CARDS:
 				$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
+
+
+func dealer_turn() -> void:
+	dealer_can_play = false
+	await get_tree().create_timer(1.5).timeout
+	if DealerAI.should_draw(dealer_hand.sum, player_hand.sum):
+		draw_dealer_card()
+	else:
+		dealer_hold()
+	dealer_can_play = true
+
 
 func draw_player_card() -> void:
 	if game_state != GameState.PLAYER_TURN:
@@ -151,6 +171,9 @@ func add_card_to_hand(hand: Hand, card_container: CardContainer, card) -> Varian
 	return card
 
 func player_lose() -> void:
+	if game_state in [GameState.MENU, GameState.RETURN_CARDS]:
+		return
+	game_state = GameState.MENU
 	var round_end_menu = ROUND_END_MENU.instantiate()
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(false)
@@ -158,6 +181,9 @@ func player_lose() -> void:
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
+	if game_state in [GameState.MENU, GameState.RETURN_CARDS]:
+		return
+	game_state = GameState.MENU
 	var round_end_menu = ROUND_END_MENU.instantiate()
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(true)

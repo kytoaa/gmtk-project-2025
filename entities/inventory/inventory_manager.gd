@@ -8,7 +8,7 @@ const MOKEPON_CARD_SCENE = preload("res://entities/mokepon/mokepon_card.tscn")
 const CONTAINER_SCENE = preload("res://ui/card_container.tscn")
 const INVENTORY_CONTAINER_SCENE = preload("res://entities/inventory/inventory_container.tscn")
 
-@onready var grid: GridContainer = $ColorRect/MarginContainer/GridContainer
+@onready var grid: GridContainer = $ColorRect/ScrollContainer/MarginContainer/GridContainer
 
 var initialised: bool = false
 
