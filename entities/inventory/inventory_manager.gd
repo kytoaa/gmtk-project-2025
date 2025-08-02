@@ -5,6 +5,8 @@ var home_positions: Array[Vector2]
 
 const CARD_SCENE = preload("res://entities/card/card.tscn")
 const MOKEPON_CARD_SCENE = preload("res://entities/mokepon/mokepon_card.tscn")
+const CHIP_SCENE = preload("res://entities/chip/chip.tscn")
+const GUMMY_BEAR_SCENE = preload("res://entities/gummy_bear/gummy_bear.tscn")
 const CONTAINER_SCENE = preload("res://ui/card_container.tscn")
 const INVENTORY_CONTAINER_SCENE = preload("res://entities/inventory/inventory_container.tscn")
 
@@ -27,6 +29,7 @@ func _on_inventory_update() -> void:
 	print(len(GameData.inventory.items))
 	for item in GameData.inventory.items:
 		var itemholder = INVENTORY_CONTAINER_SCENE.instantiate()
+		
 		if item.itemtype == InventoryItem.ItemType.Card:
 			var container = CONTAINER_SCENE.instantiate()
 			var card = CARD_SCENE.instantiate()
@@ -34,6 +37,7 @@ func _on_inventory_update() -> void:
 			container.add_card(card)
 			itemholder.add_item(item, container)
 			card.init(item.type, item.suit)
+			
 		if item.itemtype == InventoryItem.ItemType.MokeponCard:
 			var container = CONTAINER_SCENE.instantiate()
 			var card = MOKEPON_CARD_SCENE.instantiate()
@@ -41,3 +45,15 @@ func _on_inventory_update() -> void:
 			container.add_card(card)
 			itemholder.add_item(item, container)
 			card.init(item.mokepon)
+			
+		if item.itemtype == InventoryItem.ItemType.GummyBear:
+			var gummy_bear = GUMMY_BEAR_SCENE.instantiate()
+			self.grid.add_child(itemholder)
+			itemholder.add_item(item, gummy_bear)
+			gummy_bear.init(item.colour)
+			
+		if item.itemtype == InventoryItem.ItemType.Chip:
+			var chip = CHIP_SCENE.instantiate()
+			self.grid.add_child(itemholder)
+			itemholder.add_item(item, chip)
+			chip.init(item.colour)

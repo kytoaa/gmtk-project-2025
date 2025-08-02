@@ -68,6 +68,10 @@ func _ready() -> void:
 	GameData.inventory.add_item(Card.build(Card.CardType.NUMBER_4, Card.CardSuit.SPADES))
 	for i in range(20):
 		GameData.inventory.add_item(MokeponCard.build(MokeponCard.Mokepon.MatsuneHiku))
+	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
+	GameData.inventory.add_item(GummyBear.new(GummyBear.Colour.Green, 1))
+	GameData.inventory.add_item(Chip.new(Chip.Colour.Black, 2))
+	GameData.inventory.add_item(Chip.new(Chip.Colour.White, 2))
 
 func init() -> void:
 	GameData.init()

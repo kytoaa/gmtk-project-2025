@@ -2,6 +2,8 @@ extends Control
 
 const CARD = preload("res://entities/card/card.tscn")
 const MOKEPON_CARD = preload("res://entities/mokepon/mokepon_card.tscn")
+const CHIP = preload("res://entities/chip/chip.tscn")
+const GUMMY_BEAR = preload("res://entities/gummy_bear/gummy_bear.tscn")
 
 const DragDropLocation := preload("res://scenes/game_scene.gd").DragDropLocation
 
@@ -34,6 +36,22 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 			remove_child(card)
 			card.init(item.mokepon)
 			set_drag_preview(card)
+			return [self.data, item, self.drag_location]
+		InventoryItem.ItemType.GummyBear:
+			var gummy_bear = GUMMY_BEAR.instantiate()
+			add_child(gummy_bear)
+			remove_child(gummy_bear)
+			gummy_bear.init(item.colour)
+			gummy_bear.get_child(0).position = Vector2.ZERO
+			set_drag_preview(gummy_bear)
+			return [self.data, item, self.drag_location]
+		InventoryItem.ItemType.Chip:
+			var chip = CHIP.instantiate()
+			add_child(chip)
+			remove_child(chip)
+			chip.init(item.colour)
+			chip.get_child(0).position = Vector2.ZERO
+			set_drag_preview(chip)
 			return [self.data, item, self.drag_location]
 	return []
 

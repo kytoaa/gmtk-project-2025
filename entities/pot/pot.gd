@@ -1,7 +1,10 @@
 extends ColorRect
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	return data[1].itemtype == InventoryItem.ItemType.Card
+	return (data[1].itemtype == InventoryItem.ItemType.Card
+			or data[1].itemtype == InventoryItem.ItemType.Chip
+			or (data[1].itemtype == InventoryItem.ItemType.GummyBear
+				and data[1].colour in GummyBear.BET_COLOURS))
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var item

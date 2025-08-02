@@ -13,6 +13,8 @@ enum Colour {
 	Purple,
 }
 
+const BET_COLOURS: Array[Colour] = [Colour.White, Colour.Red, Colour.Blue, Colour.Green, Colour.Black]
+
 var colour: Colour
 
 func _init(colour: Colour, count: int = 1) -> void:
