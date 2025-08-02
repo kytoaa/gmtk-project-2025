@@ -128,6 +128,8 @@ func draw_player_card() -> void:
 func player_hold() -> void:
 	if game_state != GameState.PLAYER_TURN:
 		return
+	if len(player_hand.cards) == 0:
+		return
 	
 	game_state = GameState.OPPONENT_TURN
 
