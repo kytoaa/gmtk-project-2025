@@ -3,12 +3,9 @@ extends InventoryItem
 
 enum Mokepon {
 	Waarizard = 0,
-	Cheevee,
 	Pigglyjuff,
 	MoroGajima,
 	MatsuneHiku,
-	Marados,
-	Vardegoir
 }
 
 var mokepon: Mokepon

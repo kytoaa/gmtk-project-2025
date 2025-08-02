@@ -7,4 +7,10 @@
 script = ExtResource("1_nqqu7")
 
 [node name="Background" type="Sprite2D" parent="."]
+self_modulate = Color(0.130772, 0.130772, 0.130772, 1)
+clip_children = 2
 texture = ExtResource("1_011s1")
+
+[node name="Mokepon" type="Sprite2D" parent="Background"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
