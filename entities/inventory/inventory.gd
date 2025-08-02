@@ -1,6 +1,8 @@
 class_name Inventory
 extends Resource
 
+const RuleIndex = GameData.RuleIndex
+
 var items: Array[InventoryItem]
 signal updated
 
@@ -25,6 +27,15 @@ func add_item(item: InventoryItem) -> void:
 		items.append(item)
 	else:
 		search[0].count += item.count
+	
+	if item.itemtype == InventoryItem.ItemType.GummyBear:
+		if !GameData.rules[1].revealed:
+			GameData.push_popup_queue(RuleIndex.GummyBearLuck)
+		elif randf() < 0.1:
+			GameData.push_popup_queue(RuleIndex.GummyBearLie)
+	
+	if item.itemtype == InventoryItem.ItemType.MokeponCard and item.mokepon == MokeponCard.Mokepon.Waarizard:
+		GameData.push_popup_queue(RuleIndex.Waarizard)
 	self.updated.emit()
 
 func remove_item(item: InventoryItem) -> void:
@@ -48,10 +59,19 @@ func remove_item(item: InventoryItem) -> void:
 	search[0].count = newcount
 	self.updated.emit()
 
-func money() -> int:
+func money(include_other: bool = false) -> int:
 	var sum: int = 0
 	for item in self.items:
 		if item.itemtype == InventoryItem.ItemType.Chip:
+			sum += item.colour * item.count
+		if include_other and (item.itemtype == InventoryItem.ItemType.Card):
+			match item.suit:
+				Card.CardSuit.HEARTS, Card.CardSuit.DIAMONDS:
+					sum += Chip.Colour.Red * item.count
+				Card.CardSuit.SPADES, Card.CardSuit.CLUBS:
+					sum += Chip.Colour.Blue * item.count
+		if include_other and (item.itemtype == InventoryItem.ItemType.GummyBear) \
+		and item.colour in GummyBear.BET_COLOURS:
 			sum += item.colour * item.count
 	return sum
 

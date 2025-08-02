@@ -1,6 +1,8 @@
 class_name Card
 extends InventoryItem
 
+const RuleIndex = GameData.RuleIndex
+
 var type: CardType
 var suit: CardSuit
 var times_used: int
@@ -10,7 +12,9 @@ func play_card() -> void:
 	self.times_used += 1
 	
 	if self.type == CardType.NUMBER_11 && self.times_used == 2:
+		GameData.push_popup_queue(RuleIndex.JackKing)
 		if randi() % 2 == 0:
+			GameData.push_popup_queue(RuleIndex.JackQueen)
 			self.type = CardType.NUMBER_12
 		else:
 			self.type = CardType.NUMBER_13

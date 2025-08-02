@@ -1,6 +1,7 @@
 extends Node
 
 const CardContainer = preload("res://ui/card_container.gd")
+const RuleIndex = GameData.RuleIndex
 
 const CARD_SPRITE := preload("res://entities/card/card.tscn")
 const MOKEPON_SPRITE := preload("res://entities/mokepon/mokepon_card.tscn")
@@ -35,6 +36,8 @@ var dealer_can_play: bool = true
 var round_end_menu: Node
 
 func _ready() -> void:
+	if randf() < 0.1:
+		GameData.push_popup_queue(RuleIndex.Bending)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	
@@ -67,6 +70,7 @@ func init() -> void:
 func _process(delta: float) -> void:
 	match game_state:
 		GameState.PLAYER_TURN:
+			GameData.push_popup_queue(RuleIndex.StartTurnBet)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
 		GameState.OPPONENT_TURN:
