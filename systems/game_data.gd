@@ -36,6 +36,7 @@ enum RuleIndex {
 
 enum LoopholeIndex {
 	GummiesAsChips = RuleIndex.CheatyMeter + 1,
+	CardsAsChips,
 	StealCards
 }
 
@@ -71,6 +72,7 @@ var rules: Array[Rule]
 
 var loophole_strings: Array[String] = [
 	"Use gummy bears as substitutes for equivalantly-coloured chips",
+	"Use playing cards substitutes for equivalantly-coloured chips",
 	"Steal cards when asked to place them back into the deck."
 ]
 var loopholes: Array[Loophole]
@@ -88,9 +90,8 @@ func _init() -> void:
 
 func init():
 	self.inventory.add_item(Chip.new(Chip.Colour.White, 10))
-	self.inventory.add_item(Chip.new(Chip.Colour.Red, 5))
-	self.inventory.add_item(Chip.new(Chip.Colour.Blue, 3))
-	self.inventory.add_item(Chip.new(Chip.Colour.Green, 1))
+	self.inventory.add_item(Chip.new(Chip.Colour.Red, 4))
+	self.inventory.add_item(Chip.new(Chip.Colour.Blue, 2))
 	
 
 func _ready() -> void:

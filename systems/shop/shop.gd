@@ -7,13 +7,13 @@ enum ShopItem {
 }
 
 const prices: Dictionary = {
-	ShopItem.MokeponPack: 3,
-	ShopItem.BarihoGummies: 1
+	ShopItem.MokeponPack: 30,
+	ShopItem.BarihoGummies: 20
 }
 
 const quantities: Dictionary = {
 	ShopItem.MokeponPack: 1,
-	ShopItem.BarihoGummies: 5
+	ShopItem.BarihoGummies: 3
 }
 
 func _init() -> void:

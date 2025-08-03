@@ -54,6 +54,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var item_sprite
 	match data[1].itemtype:
 		InventoryItem.ItemType.Card:
+			GameData.push_popup_queue(GameData.LoopholeIndex.CardsAsChips)
 			item = Card.build(data[1].type, data[1].suit)
 			item_sprite = CARD.instantiate()
 			self.add_child(item_sprite)
@@ -61,6 +62,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 			item_sprite.mouse_filter = Control.MOUSE_FILTER_PASS
 			item_sprite.init(item.type, item.suit)
 		InventoryItem.ItemType.GummyBear:
+			GameData.push_popup_queue(GameData.LoopholeIndex.GummiesAsChips)
 			item = GummyBear.new(data[1].colour)
 			item_sprite = GUMMY.instantiate()
 			self.add_child(item_sprite)

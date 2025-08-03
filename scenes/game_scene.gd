@@ -42,7 +42,6 @@ var round_end_menu: Node
 func _ready() -> void:
 	if randf() < 0.1:
 		GameData.push_popup_queue(RuleIndex.Bending)
-	GameData.push_popup_queue(GameData.LoopholeIndex.GummiesAsChips)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	
@@ -223,6 +222,8 @@ func move_card_from_player_hand_to_inventory(card) -> void:
 	if not (card.itemtype == InventoryItem.ItemType.MokeponCard
 			or card.itemtype == InventoryItem.ItemType.Card):
 		return
+	
+	GameData.push_popup_queue(GameData.LoopholeIndex.StealCards)
 	print("moved from hand to inv")
 	player_hand.remove_card(card)
 
