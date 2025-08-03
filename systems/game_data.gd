@@ -121,7 +121,7 @@ func get_popup(id: int) -> Node:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		accepted.emit()
-	if !popup_queue.is_empty() and !is_popup_present:
+	if (!popup_queue.is_empty() and !is_popup_present):
 		is_popup_present = true
 		var p = self.get_popup(popup_queue.pop_front())
 		if p != null:
@@ -140,4 +140,4 @@ func push_popup_queue(rule: int) -> void:
 		GameData.rules[rule].revealed = true
 		popup_queue.append(rule)
 	elif rule >= ShopItemIndex.Waarizard and rule <= ShopItemIndex.Bariho:
-		popup_queue.append(rule)
+		popup_queue.push_front(rule)

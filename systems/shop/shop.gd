@@ -31,9 +31,11 @@ func purchase(item: ShopItem, inventory: Inventory) -> void:
 		ShopItem.MokeponPack:
 			for i in range(quantities[item]):
 				var to_add: MokeponCard.Mokepon = MokeponCard.Mokepon.values()[randi() % MokeponCard.Mokepon.keys().size()]
+				GameData.push_popup_queue(to_add+GameData.ShopItemIndex.Waarizard)
 				inventory.add_item(MokeponCard.build(to_add))
 		ShopItem.BarihoGummies:
 			print(str(quantities[item]))
+			GameData.push_popup_queue(GameData.ShopItemIndex.Bariho)
 			for i in range(quantities[item]):
 				var to_add: GummyBear.Colour = GummyBear.Colour.values()[randi() % GummyBear.Colour.keys().size()]
 				inventory.add_item(GummyBear.new(to_add))

@@ -229,5 +229,27 @@ size_flags_vertical = 1
 fill_mode = 3
 show_percentage = false
 
+[node name="Label" type="RichTextLabel" parent="UI/SegmentSplitter/RightSide/CheatMeterMargin/ProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "C
+H
+E
+A
+T
+Y
+
+M
+E
+T
+E
+R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button" to="." method="draw_player_card"]
 [connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Button" to="." method="player_hold"]
