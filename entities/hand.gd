@@ -24,18 +24,6 @@ func add_card(card) -> int:
 		GameData.push_popup_queue(RuleIndex.KingRich)
 	if card.suit == Card.CardSuit.DIAMONDS:
 		GameData.push_popup_queue(RuleIndex.DiamondPrickly)
-	if len(cards) > 1 and card.suit == Card.CardSuit.HEARTS and cards[len(cards)-2].suit == Card.CardSuit.HEARTS:
-		GameData.push_popup_queue(RuleIndex.HeartsBackToBack)
-		cards.pop_back()
-		var removed: Card = cards.pop_back()
-		match removed.type:
-			Card.CardType.NUMBER_11, Card.CardType.NUMBER_12, Card.CardType.NUMBER_13:
-				self.base_sum -= 10
-			Card.CardType.NUMBER_1:
-				self.base_sum -= 1
-			_:
-				self.base_sum -= int(card.type)
-		cards.append(Card.build(Card.CardType.NUMBER_1, Card.CardSuit.HEARTS))
 	
 	var _sum = self.base_sum
 	var hand_has_ace = (cards.find_custom(func(card): return "type" in card and card.type == Card.CardType.NUMBER_1) != -1)

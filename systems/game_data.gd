@@ -26,7 +26,6 @@ enum RuleIndex {
 	Tesko,
 	Bending,
 	DiamondPrickly,
-	HeartsBackToBack,
 	CheatyMeter
 }
 
@@ -34,7 +33,7 @@ var rule_strings: Array[String] = [
 	"At the start of every turn, you must drag your bet into the pot.\nWhite=£1, red=£10, blue=£50, green=£100 and black=£500.",
 	"A minimum amount of £10 must be bet before playing",
 	"Gummy bears give luck when eaten. Right-click to eat", 
-	"Rule #2 was a lie. Gummy bears do not give luck when eaten.",
+	"Rule #"+str(RuleIndex.GummyBearLuck)+" was a lie. Gummy bears do not give luck when eaten.",
 	"If the same Jack appears in two different games, it will grow up and become a King, inheriting the throne.",
 	"A Jack may also grow up into a Queen. We don't discriminate in this kingdom.",
 	"Aces and 8s don't like each other. Any Ace in a hand with an 8 can only be worth 1 point because 8s detract from the true value of an Ace.",
@@ -45,9 +44,8 @@ var rule_strings: Array[String] = [
 	"Players may visit Tesko in between rounds to purchase snacks and gamble in other forms",
 	"Cards do not like to be bent because it hurts.",
 	"Diamond cards are very prickly characters.",
-	"Two hearts drawn back-to-back can use the power of friendship to become something greater than themselves.",
 	"The state-of-the-art CHEATY-METER increases every time you exploit a loophole. When it reaches the top, you get kicked out."
-] # rules 9 and 15 (one-indexed) have not been implemented yet
+] # rules 10 and 15 (one-indexed) have not been implemented yet
 var rules: Array[Rule]
 
 func _init() -> void:
@@ -57,6 +55,8 @@ func _init() -> void:
 	cheat_meter = 20.0
 	for i in range(len(rule_strings)):
 		rules.append(Rule.new(rule_strings[i], i+1))
+	
+	print("Rule Waarizard: " + rules[RuleIndex.Waarizard].text)
 
 func init():
 	self.inventory.add_item(Chip.new(Chip.Colour.White, 10))
