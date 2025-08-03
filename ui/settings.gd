@@ -9,9 +9,6 @@ extends Control
 @onready var sfx_volume_slider = $MarginContainer/VBoxContainer/GridContainer2/SfxVolume
 @onready var music_volume_slider = $MarginContainer/VBoxContainer/GridContainer2/MusicVolume
 
-@onready var sfx_player = $SfxPlayer
-@onready var music_player = $MusicPlayer
-
 var master_volume: float
 var music_volume: float
 var sfx_volume: float
@@ -36,10 +33,8 @@ func on_music_volume_changed(value: float):
 	
 func on_sfx_volume_changed(value: float):
 	AudioServer.set_bus_volume_db(sfx_index, linear_to_db(value))
-	
-func on_sfx_button_pressed():
-	sfx_player.playing = !sfx_player.playing
 
-func on_music_button_pressed():
-	music_player.playing = !music_player.playing
-	
+
+func _on_check_box_toggled(toggled_on: bool) -> void:
+	GameData.show_popups = toggled_on
+	$MarginContainer/VBoxContainer/HBoxContainer/CheckBox/Label.visible = !toggled_on

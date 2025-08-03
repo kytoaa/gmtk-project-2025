@@ -10,6 +10,7 @@ signal ready_to_free
 const WAARIZARD = preload("res://entities/mokepon/waarizard.png")
 const MATSUNE = preload("res://entities/mokepon/matsune_hiku.png")
 const PIGGLYJUFF = preload("res://entities/mokepon/pigglyjuff.png")
+const MORO = preload("res://entities/mokepon/moro_gajima.png")
 
 const BARIHO = preload("res://systems/shop/gummybear.png")
 
@@ -34,6 +35,7 @@ func init(item: InventoryItem) -> void:
 					lbl = "You got Pigglyjuff!"
 					mv = "Marker"
 				MokeponCard.Mokepon.MoroGajima:
+					txtr = MORO
 					lbl = "You got Moro Gajima!"
 					mv = "Breakdance"
 		InventoryItem.ItemType.GummyBear:

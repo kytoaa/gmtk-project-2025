@@ -13,6 +13,8 @@ var cheat_meter: int:
 		if _cheat_meter == 100:
 			SignalBus.on_game_end.emit(LossReason.CHEATING)
 
+var show_popups: bool
+
 var shop: Shop
 
 var popup_queue: Array[int]
@@ -87,6 +89,7 @@ var loophole_strings: Array[String] = [
 var loopholes: Array[Loophole]
 
 func _init() -> void:
+	self.show_popups = true
 	for i in range(len(rule_strings)):
 		rules.append(Rule.new(rule_strings[i], i+1))
 	for i in range(len(loophole_strings)):
@@ -159,10 +162,10 @@ func _process(delta: float) -> void:
 		is_popup_present = false
 
 func push_popup_queue(rule: int) -> void:
-	if rule >= RuleIndex.StartTurnBet and rule <= RuleIndex.CheatyMeter and !GameData.rules[rule].revealed:
+	if rule >= RuleIndex.StartTurnBet and rule <= RuleIndex.CheatyMeter and !GameData.rules[rule].revealed and show_popups:
 		GameData.rules[rule].revealed = true
 		popup_queue.append(rule)
-	elif rule >= LoopholeIndex.GummiesAsChips and rule <= LoopholeIndex.StealCards and !GameData.loopholes[rule-LoopholeIndex.GummiesAsChips].revealed:
+	elif rule >= LoopholeIndex.GummiesAsChips and rule <= LoopholeIndex.StealCards and !GameData.loopholes[rule-LoopholeIndex.GummiesAsChips].revealed and show_popups:
 		GameData.loopholes[rule-LoopholeIndex.GummiesAsChips].revealed = true
 		popup_queue.append(rule)
 	elif rule >= ShopItemIndex.Waarizard and rule <= ShopItemIndex.Bariho:
