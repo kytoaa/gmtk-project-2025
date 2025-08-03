@@ -24,9 +24,7 @@ func clear() -> Array:
 	for child in self.item_children:
 		self.remove_child(child)
 	
-	self.update_label()
-	
-	return self.contents.items.map(
+	var items = self.contents.items.map(
 		func(item):
 			match item.itemtype:
 				InventoryItem.ItemType.Chip:
@@ -38,6 +36,11 @@ func clear() -> Array:
 									if item.suit in [Card.CardSuit.HEARTS, Card.CardSuit.DIAMONDS]
 									else Chip.Colour.Blue, 2)
 	)
+	self.contents.items.clear()
+	
+	self.update_label()
+	
+	return items
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	return self.can_add_to_pot \

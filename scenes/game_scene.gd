@@ -244,7 +244,9 @@ func move_card_from_inventory_to_deck(card) -> void:
 
 func go_to_shop_cleanup() -> void:
 	for card in self.player_hand.cards:
-		self.move_card_from_player_hand_to_deck(card)
+		GameData.deck.add_card(card)
+	for card in self.dealer_hand.cards:
+		GameData.deck.add_card(card)
 	
 	NavigationManager.go_to_scene(SceneList.shop())
 
