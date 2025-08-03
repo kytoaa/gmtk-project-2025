@@ -194,6 +194,7 @@ func player_lose() -> void:
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(false)
 	self.round_end_menu = round_end_menu
+	pot.clear()
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
@@ -204,6 +205,9 @@ func dealer_lose() -> void:
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(true)
 	self.round_end_menu = round_end_menu
+	var items = pot.clear()
+	for item in items:
+		GameData.inventory.add_item(item)
 	SignalBus.on_dealer_loss.emit()
 
 func move_card_from_player_hand_to_deck(card) -> void:
