@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtqvm67dqwgmh"]
+
+[ext_resource type="Script" uid="uid://b8ib65xj263y4" path="res://scenes/tutorial.gd" id="1_c13y7"]
+
+[node name="Tutorial" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c13y7")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "[b]HOW TO PLAY[/b]
+
+To make a bet, drag & drop from your inventory on the left into the pot in the middle.
+
+To pull a card, click on the deck.
+
+To stop pulling cards, click \"HOLD\"
+
+Be sure to take note of any new rules!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+size_flags_stretch_ratio = 0.2
+theme_override_font_sizes/font_size = 20
+text = "OK!"
+
+[connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

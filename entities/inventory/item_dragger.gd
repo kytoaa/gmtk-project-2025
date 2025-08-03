@@ -10,6 +10,14 @@ const DragDropLocation := preload("res://scenes/game_scene.gd").DragDropLocation
 var drag_location: DragDropLocation = DragDropLocation.INVENTORY
 @onready var data = GameData.inventory
 
+var mouse_over_gummy: bool = false
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT and mouse_over_gummy:
+		GameData.inventory.remove_item(GummyBear.new(get_parent().item.colour))
+
+
+
 func all_children_recurs(node: Node) -> void:
 	for N in node.get_children():
 		if N.is_class("Control"):
@@ -59,6 +67,8 @@ func _on_mouse_entered() -> void:
 	self.modulate = Color(0.5, 0.5, 0.5)
 	if get_parent().item.itemtype == InventoryItem.ItemType.GummyBear:
 			GameData.push_popup_queue(GameData.RuleIndex.GummyBearLuck)
+			mouse_over_gummy = true
 	
 func _on_mouse_exited() -> void:
 	self.modulate = Color(1, 1, 1)
+	mouse_over_gummy = false
