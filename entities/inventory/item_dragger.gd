@@ -57,6 +57,8 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 
 func _on_mouse_entered() -> void:
 	self.modulate = Color(0.5, 0.5, 0.5)
+	if get_parent().item.itemtype == InventoryItem.ItemType.GummyBear:
+			GameData.push_popup_queue(GameData.RuleIndex.GummyBearLuck)
 	
 func _on_mouse_exited() -> void:
 	self.modulate = Color(1, 1, 1)

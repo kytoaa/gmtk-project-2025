@@ -13,6 +13,7 @@ signal accepted
 
 enum RuleIndex {
 	StartTurnBet = 0,
+	MinimumBet,
 	GummyBearLuck,
 	GummyBearLie,
 	JackKing,
@@ -31,6 +32,7 @@ enum RuleIndex {
 
 var rule_strings: Array[String] = [
 	"At the start of every turn, you must drag your bet into the pot.\nWhite=£1, red=£10, blue=£50, green=£100 and black=£500.",
+	"A minimum amount of £10 must be bet before playing",
 	"Gummy bears give luck when eaten. Right-click to eat", 
 	"Rule #2 was a lie. Gummy bears do not give luck when eaten.",
 	"If the same Jack appears in two different games, it will grow up and become a King, inheriting the throne.",
@@ -63,6 +65,28 @@ func init():
 	self.inventory.add_item(Chip.new(Chip.Colour.Green, 1))
 	
 	self.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
+
+func _ready() -> void:
+	var game_state_popup = preload("res://ui/game_state_popup.tscn").instantiate()
+	self.add_child(game_state_popup)
+	SignalBus.player_turn_start.connect(
+		func():
+			game_state_popup.get_child(0).get_child(0).get_child(0).text = "player turn!"
+			var anim: AnimationPlayer = game_state_popup.get_child(1)
+			anim.play("popin")
+	)
+	SignalBus.opponent_turn_start.connect(
+		func():
+			game_state_popup.get_child(0).get_child(0).get_child(0).text = "opponent turn!"
+			var anim: AnimationPlayer = game_state_popup.get_child(1)
+			anim.play("popin")
+	)
+	SignalBus.return_cards_start.connect(
+		func():
+			game_state_popup.get_child(0).get_child(0).get_child(0).text = "return cards!"
+			var anim: AnimationPlayer = game_state_popup.get_child(1)
+			anim.play("popin")
+	)
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):

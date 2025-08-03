@@ -7,6 +7,7 @@ const GUMMY = preload("res://entities/gummy_bear/gummy_bear.tscn")
 const CHIP = preload("res://entities/chip/chip.tscn")
 
 @onready var pot_amount_label = $Label
+var can_add_to_pot: bool = true
 
 func _ready() -> void:
 	self.contents.updated.connect(update_label)
@@ -14,8 +15,12 @@ func _ready() -> void:
 func update_label() -> void:
 	self.pot_amount_label.text = "£" + str(contents.money(true))
 
+func total() -> int:
+	return contents.money(true)
+
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	return (data[1].itemtype == InventoryItem.ItemType.Card
+	return self.can_add_to_pot \
+			and (data[1].itemtype == InventoryItem.ItemType.Card
 			or data[1].itemtype == InventoryItem.ItemType.Chip
 			or (data[1].itemtype == InventoryItem.ItemType.GummyBear
 				and data[1].colour in GummyBear.BET_COLOURS))

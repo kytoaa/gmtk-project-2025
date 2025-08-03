@@ -14,11 +14,14 @@ enum DragDropLocation {
 }
 
 enum GameState {
+	BETTING,
 	PLAYER_TURN,
 	OPPONENT_TURN,
 	RETURN_CARDS,
 	MENU,
 }
+
+const MINIMUM_BET := 10
 
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
@@ -28,8 +31,9 @@ enum GameState {
 @onready var dealer_hand_display: CardContainer = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/MarginContainer/CardContainer
 @onready var dealer_hand_total: Label = $UI/SegmentSplitter/VBoxContainer2/OpponentCards/TotalDisplay
 @onready var inventory: Control = %Inventory
+@onready var pot := %Pot
 
-var game_state: GameState = GameState.PLAYER_TURN
+var game_state: GameState = GameState.BETTING
 
 var dealer_can_play: bool = true
 
@@ -43,7 +47,7 @@ func _ready() -> void:
 	
 	%Inventory.get_child(0).dropped_on_inventory.connect(move_card_from_player_hand_to_inventory)
 	
-	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(
+	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.on_drop_card.connect(
 		func(card, location):
 			match location:
 				DragDropLocation.INVENTORY:
@@ -69,21 +73,29 @@ func init() -> void:
 
 func _process(delta: float) -> void:
 	match game_state:
-		GameState.PLAYER_TURN:
+		GameState.BETTING:
 			GameData.push_popup_queue(RuleIndex.StartTurnBet)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = true
+			pot.can_add_to_pot = true
+		GameState.PLAYER_TURN:
+			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = true
+			pot.can_add_to_pot = false
 		GameState.OPPONENT_TURN:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			pot.can_add_to_pot = false
 			if dealer_can_play:
 				dealer_turn()
 		GameState.MENU:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			pot.can_add_to_pot = false
 		GameState.RETURN_CARDS:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			pot.can_add_to_pot = false
 			if len(GameData.deck.cards) == Deck.MAX_CARDS:
 				$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
 
@@ -99,8 +111,14 @@ func dealer_turn() -> void:
 
 
 func draw_player_card() -> void:
-	if game_state != GameState.PLAYER_TURN:
+	if game_state not in [GameState.PLAYER_TURN, GameState.BETTING]:
 		return
+	if game_state == GameState.BETTING:
+		if pot.total() < MINIMUM_BET:
+			GameData.push_popup_queue(RuleIndex.MinimumBet)
+			return
+		SignalBus.player_turn_start.emit()
+	game_state = GameState.PLAYER_TURN
 	
 	var card = self.draw_card(player_hand, player_hand_display)
 	
@@ -123,6 +141,7 @@ func player_hold() -> void:
 		return
 	
 	game_state = GameState.OPPONENT_TURN
+	SignalBus.opponent_turn_start.emit()
 
 func draw_dealer_card() -> void:
 	if game_state != GameState.OPPONENT_TURN:
@@ -227,6 +246,7 @@ func go_to_shop_cleanup() -> void:
 
 func continue_game() -> void:
 	game_state = GameState.RETURN_CARDS
+	SignalBus.return_cards_start.emit()
 	
 	for card in self.dealer_hand.cards:
 		GameData.deck.add_card(card)
@@ -238,7 +258,7 @@ func continue_game() -> void:
 			print("hand empty")
 			while len(GameData.deck.cards) < Deck.MAX_CARDS:
 				await get_tree().process_frame
-			game_state = GameState.PLAYER_TURN
+			game_state = GameState.BETTING
 			self.player_hand = Hand.new()
 			self.dealer_hand = Hand.new()
 			player_hand_total.text = "Total: " + str(0)
