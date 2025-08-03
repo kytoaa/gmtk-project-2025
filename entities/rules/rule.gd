@@ -1,5 +1,5 @@
 class_name Rule
-extends Object
+extends Resource
 
 var revealed: bool
 var text: String
@@ -14,6 +14,5 @@ func _init(text: String, number: int) -> void:
 
 func get_popup_node() -> Control:
 	var ret: Control = popup.instantiate()
-	ret.get_node("Panel/VBoxContainer/HBoxContainer/PanelMain/Label").text = "RULE " + str(self.number)
-	ret.get_node("Panel/VBoxContainer/Text/MarginContainer/Label").text = self.text
+	ret.init("RULE " + str(self.number), self.text)
 	return ret
