@@ -19,6 +19,8 @@ enum GameState {
 	MENU,
 }
 
+static var SONG_PROGRESS: float = 0.0
+
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
 
@@ -35,6 +37,8 @@ var dealer_can_play: bool = true
 var round_end_menu: Node
 
 func _ready() -> void:
+	$AudioStreamPlayer.play(SONG_PROGRESS)
+	$AudioStreamPlayer.tree_exiting.connect(func(): SONG_PROGRESS = $AudioStreamPlayer.get_playback_position())
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	

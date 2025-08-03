@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b8ec0yxtxcf7m"]
+[gd_scene load_steps=15 format=3 uid="uid://b8ec0yxtxcf7m"]
 
 [ext_resource type="Script" uid="uid://7gi847m676j0" path="res://scenes/game_scene.gd" id="1_onqr8"]
 [ext_resource type="PackedScene" uid="uid://c5kdjgda0ialo" path="res://entities/inventory/inventory.tscn" id="2_bw6k5"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://dnbx7h2pg6kxd" path="res://entities/pot/pot.gd" id="4_y3j0m"]
 [ext_resource type="Script" uid="uid://cpa5ldy8gdk3a" path="res://scenes/card_container_drop.gd" id="5_rurhu"]
 [ext_resource type="Script" uid="uid://dyy6snk0rau5x" path="res://ui/deck_drop.gd" id="7_kk2rg"]
+[ext_resource type="AudioStream" uid="uid://dtxhr1hiqwqq5" path="res://sound/game_music.wav" id="8_b5spy"]
+[ext_resource type="Script" uid="uid://g6cugbm8utgh" path="res://sound/audio_stream_player.gd" id="9_utbpp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ycayy"]
 
@@ -207,6 +209,11 @@ layout_mode = 2
 size_flags_vertical = 1
 fill_mode = 3
 show_percentage = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_b5spy")
+bus = &"Music"
+script = ExtResource("9_utbpp")
 
 [connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button" to="." method="draw_player_card"]
 [connection signal="pressed" from="UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Button" to="." method="player_hold"]
