@@ -16,4 +16,4 @@ func init(mokepon: Mokepon, index: int = 0) -> void:
 		Mokepon.Pigglyjuff:
 			sprite.texture = preload("res://entities/mokepon/pigglyjuff.png")
 		Mokepon.MoroGajima:
-			pass
+			sprite.texture = preload("res://entities/mokepon/moro_gajima.png")
