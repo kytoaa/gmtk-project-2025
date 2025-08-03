@@ -1,8 +1,17 @@
 extends Node
 
+signal cheat_meter_changed(int)
+
 var deck: Deck
 var inventory: Inventory
-var cheat_meter: float
+var _cheat_meter: int
+var cheat_meter: int:
+	get: return _cheat_meter
+	set(value):
+		_cheat_meter = clamp(value, 0, 100)
+		cheat_meter_changed.emit(_cheat_meter)
+		if _cheat_meter == 100:
+			SignalBus.on_game_end.emit(LossReason.CHEATING)
 
 var shop: Shop
 
@@ -58,12 +67,13 @@ func init():
 	self.deck = Deck.new()
 	self.inventory = Inventory.new()
 	self.shop = Shop.new()
-	cheat_meter = 20.0
-	
+	self._cheat_meter = 20
+
 	self.inventory.add_item(Chip.new(Chip.Colour.White, 10))
 	self.inventory.add_item(Chip.new(Chip.Colour.Red, 5))
 	self.inventory.add_item(Chip.new(Chip.Colour.Blue, 3))
 	self.inventory.add_item(Chip.new(Chip.Colour.Green, 1))
+	self.inventory.add_item(Card.build(Card.CardType.NUMBER_2, Card.CardSuit.HEARTS, 3))
 	
 	self.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
 
@@ -108,3 +118,8 @@ func push_popup_queue(rule: RuleIndex) -> void:
 	if !GameData.rules[rule].revealed:
 		GameData.rules[rule].revealed = true
 		popup_queue.append(rule)
+
+enum LossReason {
+	CHEATING,
+	NO_MONEY,
+}

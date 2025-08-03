@@ -49,7 +49,7 @@ func _ready() -> void:
 	
 	%Inventory.get_child(0).dropped_on_inventory.connect(move_card_from_player_hand_to_inventory)
 	
-	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.on_drop_card.connect(
+	$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.on_drop_card.connect(
 		func(card, location):
 			match location:
 				DragDropLocation.INVENTORY:
@@ -69,10 +69,12 @@ func _ready() -> void:
 	self.init()
 	GameData.deck.shuffle()
 	GameData.deck.card_count_change.connect(func(count): $UI/SegmentSplitter/RightSide/VBoxContainer/Deck/CardCount.text = str(count))
+
+	GameData.cheat_meter_changed.connect(func(value): $UI/SegmentSplitter/RightSide/CheatMeterMargin/CheatMeter.set_value_no_signal(float(value)))
 	
 	if GameData.inventory.money(true) < MINIMUM_BET:
 		game_state = GameState.MENU
-		SignalBus.on_game_end.emit()
+		SignalBus.on_game_end.emit(GameData.LossReason.NO_MONEY)
 
 func init() -> void:
 	self.inventory.init()
@@ -82,25 +84,25 @@ func _process(delta: float) -> void:
 		GameState.BETTING:
 			GameData.push_popup_queue(RuleIndex.StartTurnBet)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = true
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
 			pot.can_add_to_pot = true
 		GameState.PLAYER_TURN:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = true
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
 			pot.can_add_to_pot = false
 		GameState.OPPONENT_TURN:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
 			if dealer_can_play:
 				dealer_turn()
 		GameState.MENU:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
 		GameState.RETURN_CARDS:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
 			if len(GameData.deck.cards) == Deck.MAX_CARDS:
 				$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
@@ -198,7 +200,7 @@ func player_lose() -> void:
 	game_state = GameState.MENU
 	
 	if GameData.inventory.money(true) < MINIMUM_BET:
-		SignalBus.on_game_end.emit()
+		SignalBus.on_game_end.emit(GameData.LossReason.NO_MONEY)
 		return
 	
 	var round_end_menu = ROUND_END_MENU.instantiate()
@@ -206,6 +208,7 @@ func player_lose() -> void:
 	round_end_menu.init(false)
 	self.round_end_menu = round_end_menu
 	pot.clear()
+	GameData.cheat_meter -= 10
 	SignalBus.on_player_loss.emit()
 
 func dealer_lose() -> void:
@@ -219,6 +222,7 @@ func dealer_lose() -> void:
 	var items = pot.clear()
 	for item in items:
 		GameData.inventory.add_item(item)
+	GameData.cheat_meter -= 3
 	SignalBus.on_dealer_loss.emit()
 
 func move_card_from_player_hand_to_deck(card) -> void:
@@ -232,6 +236,7 @@ func move_card_from_player_hand_to_inventory(card) -> void:
 		return
 	print("moved from hand to inv")
 	player_hand.remove_card(card)
+	GameData.cheat_meter += 2
 
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
@@ -239,6 +244,8 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 	self.add_card_to_hand(player_hand, player_hand_display, card)
 	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
+	
+	GameData.cheat_meter += 5
 	
 	if player_hand.has_lost():
 		self.player_lose()
@@ -252,6 +259,7 @@ func move_card_from_inventory_to_deck(card) -> void:
 			or card.itemtype == InventoryItem.ItemType.Card):
 		return
 	GameData.deck.add_card(card)
+	GameData.cheat_meter += 2
 
 func go_to_shop_cleanup() -> void:
 	for card in self.player_hand.cards:
@@ -272,9 +280,6 @@ func continue_game() -> void:
 	
 	self.player_hand.hand_empty.connect(
 		func():
-			if GameData.inventory.money(true) < MINIMUM_BET:
-				SignalBus.on_game_end.emit()
-				
 			print("hand empty")
 			while len(GameData.deck.cards) < Deck.MAX_CARDS:
 				await get_tree().process_frame
@@ -288,6 +293,7 @@ func continue_game() -> void:
 	self.round_end_menu.queue_free()
 	self.player_hand_display.convert_to_draggable(self.player_hand.cards)
 
-func game_end() -> void:
+func game_end(reason: GameData.LossReason) -> void:
 	var menu := GAME_OVER_MENU.instantiate()
 	$UI.add_child(menu)
+	menu.init(reason)

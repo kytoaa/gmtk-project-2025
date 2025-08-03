@@ -22,7 +22,7 @@ func total() -> int:
 
 func clear() -> Array:
 	for child in self.item_children:
-		self.remove_child(child)
+		child.queue_free()
 	
 	var items = self.contents.items.map(
 		func(item):
