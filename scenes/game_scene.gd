@@ -93,6 +93,7 @@ func _process(delta: float) -> void:
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
 		GameState.RETURN_CARDS:
+			GameData.push_popup_queue(GameData.RuleIndex.ReturnCards)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
@@ -138,6 +139,7 @@ func player_hold() -> void:
 	if game_state != GameState.PLAYER_TURN:
 		return
 	if len(player_hand.cards) == 0:
+		GameData.push_popup_queue(GameData.RuleIndex.MustDrawCard)
 		return
 	
 	game_state = GameState.OPPONENT_TURN
@@ -166,6 +168,7 @@ func dealer_hold() -> void:
 		self.dealer_lose()
 	else:
 		self.player_lose()
+	GameData.push_popup_queue(GameData.RuleIndex.DrawIsLoss)
 
 func draw_card(hand: Hand, card_container: CardContainer) -> Variant:
 	var card = GameData.deck.draw_card()

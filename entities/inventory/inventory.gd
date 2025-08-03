@@ -10,6 +10,9 @@ func should_share_slot(item1: InventoryItem, item2: InventoryItem) -> bool:
 	if item1.itemtype != item2.itemtype:
 		return false
 	
+	if item1 == null or item2 == null:
+		return false
+	
 	match item1.itemtype:
 		InventoryItem.ItemType.MokeponCard:
 			return item1.mokepon == item2.mokepon
@@ -21,6 +24,9 @@ func should_share_slot(item1: InventoryItem, item2: InventoryItem) -> bool:
 			return false
 
 func add_item(item: InventoryItem) -> void:
+	if item == null:
+		return
+	
 	var search = items.filter(func(it): return should_share_slot(it, item))
 	
 	if len(search) == 0:
