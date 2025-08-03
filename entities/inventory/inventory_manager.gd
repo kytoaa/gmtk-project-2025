@@ -11,6 +11,7 @@ const CONTAINER_SCENE = preload("res://ui/card_container.tscn")
 const INVENTORY_CONTAINER_SCENE = preload("res://entities/inventory/inventory_container.tscn")
 
 @onready var grid: GridContainer = $ColorRect/ScrollContainer/MarginContainer/GridContainer
+@onready var moneytxt: Label = $Label
 
 var initialised: bool = false
 
@@ -24,6 +25,7 @@ func _process(delta: float) -> void:
 		return
 
 func _on_inventory_update() -> void:
+	moneytxt.text = "£" + str(GameData.inventory.money())
 	for obj in grid.get_children():
 		obj.queue_free()
 	print(len(GameData.inventory.items))

@@ -33,6 +33,7 @@ func add_item(item: InventoryItem) -> void:
 			GameData.push_popup_queue(RuleIndex.GummyBearLie)
 	
 	if item.itemtype == InventoryItem.ItemType.MokeponCard and item.mokepon == MokeponCard.Mokepon.Waarizard:
+		print("GOT HERERE")
 		GameData.push_popup_queue(RuleIndex.Waarizard)
 	self.updated.emit()
 
