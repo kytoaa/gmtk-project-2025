@@ -15,6 +15,8 @@ var show_intro_text: bool = true
 var rand_dialogue_chosen: bool = false
 var cant_pay_for: bool = false
 
+static var SONG_PROGRESS: float = 0.0
+
 const dialogue_options: Array[String] = [
 	"Say, when did you last shower?\nOh wait. You're a gamer.",
 	"You ever feel like life is kinda futile sometimes?",
@@ -29,6 +31,8 @@ func _ready() -> void:
 	mokepon_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.MokeponPack])
 	bariho_pricetag.text = "£" + str(GameData.shop.prices[Shop.ShopItem.BarihoGummies])
 	%Inventory.init()
+	$AudioStreamPlayer.play(SONG_PROGRESS)
+	$AudioStreamPlayer.tree_exiting.connect(func(): SONG_PROGRESS = $AudioStreamPlayer.get_playback_position())
 
 func _process(_delta: float) -> void:
 	if cant_pay_for:

@@ -24,6 +24,8 @@ enum GameState {
 
 const MINIMUM_BET := 10
 
+static var SONG_PROGRESS: float = 0.0
+
 @onready var player_hand: Hand = Hand.new()
 @onready var dealer_hand: Hand = Hand.new()
 
@@ -43,6 +45,10 @@ var round_end_menu: Node
 func _ready() -> void:
 	if randf() < 0.1:
 		GameData.push_popup_queue(RuleIndex.Bending)
+
+	$AudioStreamPlayer.play(SONG_PROGRESS)
+	$AudioStreamPlayer.tree_exiting.connect(func(): SONG_PROGRESS = $AudioStreamPlayer.get_playback_position())
+
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
 	SignalBus.on_game_end.connect(game_end)

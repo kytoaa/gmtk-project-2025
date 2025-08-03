@@ -1,9 +1,11 @@
 extends CanvasLayer
 
+@onready var master_index = AudioServer.get_bus_index("Master")
 
 @onready var color_rect: ColorRect = $ColorRect
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
+@onready var master_vol: float = AudioServer.get_bus_volume_linear(master_index)
 
 # verbatim
 const FADE_TO_BLACK = "fade_to_black"
@@ -15,12 +17,14 @@ func _ready():
 
 func _on_animation_finished(anim_name):
 	if anim_name == FADE_TO_BLACK:
+		master_vol = AudioServer.get_bus_volume_linear(master_index)
 		SignalBus.on_scene_transition_fade_to_black.emit()
 		animation_player.play(FADE_TO_NORMAL)
 	elif anim_name == FADE_TO_NORMAL:
 		color_rect.visible = false
 		SignalBus.on_scene_transition_finished.emit()
 		color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
 
 func play_transition():
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
