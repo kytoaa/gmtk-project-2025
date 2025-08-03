@@ -1,6 +1,6 @@
 extends AudioStreamPlayer
 
-@export var initial_value: float = -50.0
+@export var initial_value: float = -30.0
 @export var tween_time: float = 5
 
 func _ready() -> void:
