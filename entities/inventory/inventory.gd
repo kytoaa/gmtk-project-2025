@@ -77,9 +77,7 @@ func take_money(price: int) -> void:
 	if self.money() < price:
 		printerr("Not enough money in inventory")
 	var newmoney: int = self.money() - price
-	for item in items:
-		if item.itemtype == InventoryItem.ItemType.Chip:
-			items.remove_at(items.find(item))
+	items = self.items.filter(func(it): return it.itemtype != InventoryItem.ItemType.Chip)
 	
 	const denominations = [500, 100, 50, 10, 1]
 	for i in range(len(denominations)):
