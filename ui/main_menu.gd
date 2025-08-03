@@ -9,3 +9,6 @@ func on_settings_pressed():
 	
 func on_exit_pressed():
 	get_tree().quit()
+
+func on_credits_pressed() -> void:
+	NavigationManager.go_to_scene(SceneList.credits())

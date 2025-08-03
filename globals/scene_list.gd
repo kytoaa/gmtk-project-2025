@@ -15,3 +15,6 @@ static func game() -> PackedScene:
 
 static func shop() -> PackedScene:
 	return preload("res://systems/shop/shop.tscn")
+
+static func credits() -> PackedScene:
+	return preload("res://scenes/credits.tscn")

@@ -40,7 +40,7 @@ func _process(_delta: float) -> void:
 		return
 	
 	if mouseover_bariho and !cant_pay_for:
-		description.text = "[b]BARIHO GUMMIES: 5 qty[/b]\nKids and grownups hate it so, the dismal world of BARIHO!"
+		description.text = "[b]BARIHO GUMMIES: 3 qty[/b]\nKids and grownups hate it so, the dismal world of BARIHO!"
 		show_intro_text = false
 		rand_dialogue_chosen = false
 	elif mouseover_mokepon and !cant_pay_for:
