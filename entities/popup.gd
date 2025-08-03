@@ -2,8 +2,8 @@ extends Control
 
 @onready var anim = $AnimationPlayer
 
-@onready var header = $PanelMain/MarginContainer/Label
-@onready var body = $Text/MarginContainer/Label
+@onready var header = $VBoxContainer/PanelMain/MarginContainer/Label
+@onready var body = $VBoxContainer/Text/MarginContainer/Label
 
 var header_text := ""
 var body_text := ""
@@ -15,6 +15,7 @@ func init(header: String, body: String) -> void:
 	self.body_text = body
 
 func _ready() -> void:
+	$VBoxContainer.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
 	anim.play("popout")
 	self.header.text = self.header_text
 	self.body.text = self.body_text

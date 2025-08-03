@@ -8,26 +8,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PanelMain:position")
+tracks/0/path = NodePath("VBoxContainer:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(228, 5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Text:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(227, 33)]
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_l6t5e"]
@@ -35,26 +23,14 @@ resource_name = "popin"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PanelMain:position")
-tracks/0/interp = 2
+tracks/0/path = NodePath("VBoxContainer:position")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.533333),
+"times": PackedFloat32Array(0, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(54, 5), Vector2(228, 5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Text:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.766667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(5, 33), Vector2(227, 33)]
+"values": [Vector2(0, 0), Vector2(300, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_wa8j4"]
@@ -62,26 +38,14 @@ resource_name = "popout"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PanelMain:position")
+tracks/0/path = NodePath("VBoxContainer:position")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.433333),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(228, 5), Vector2(54, 5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Text:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.366667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(227, 33), Vector2(5, 33)]
+"values": [Vector2(300, 0), Vector2(-100, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wa8j4"]
@@ -109,53 +73,49 @@ libraries = {
 &"": SubResource("AnimationLibrary_wa8j4")
 }
 
-[node name="PanelMain" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 118.0
-offset_top = 5.0
-offset_right = 230.0
-offset_bottom = 29.0
-grow_horizontal = 2
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_right = 80.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PanelMain" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelMain"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelMain"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="Label" type="Label" parent="PanelMain/MarginContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/PanelMain/MarginContainer"]
 layout_mode = 2
-text = "RULE 18"
+text = "LOOPHOLE DISCOVERED"
 label_settings = SubResource("LabelSettings_wa8j4")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Text" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 117.0
-offset_top = 33.0
-offset_right = 327.0
-offset_bottom = 79.0
-grow_horizontal = 2
+[node name="Text" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Text"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Text"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 20
 
-[node name="Label" type="Label" parent="Text/MarginContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/Text/MarginContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -163,7 +123,7 @@ size_flags_vertical = 0
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Label2" type="Label" parent="Text"]
+[node name="Label2" type="Label" parent="VBoxContainer/Text"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4

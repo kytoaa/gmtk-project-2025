@@ -34,8 +34,13 @@ enum RuleIndex {
 	CheatyMeter
 }
 
+enum LoopholeIndex {
+	GummiesAsChips = RuleIndex.CheatyMeter + 1,
+	StealCards
+}
+
 enum ShopItemIndex {
-	Waarizard = RuleIndex.CheatyMeter + 1,
+	Waarizard = LoopholeIndex.StealCards + 1,
 	Pigglyjuff,
 	MoroGajima,
 	MatsuneHiku,
@@ -64,6 +69,12 @@ var rule_strings: Array[String] = [
 ] # rules 10 and 15 (one-indexed) have not been implemented yet
 var rules: Array[Rule]
 
+var loophole_strings: Array[String] = [
+	"Use gummy bears as substitutes for equivalantly-coloured chips",
+	"Steal cards when asked to place them back into the deck."
+]
+var loopholes: Array[Loophole]
+
 func _init() -> void:
 	self.deck = Deck.new()
 	self.inventory = Inventory.new()
@@ -71,7 +82,8 @@ func _init() -> void:
 	cheat_meter = 20.0
 	for i in range(len(rule_strings)):
 		rules.append(Rule.new(rule_strings[i], i+1))
-	
+	for i in range(len(loophole_strings)):
+		loopholes.append(Loophole.new(loophole_strings[i], LoopholeIndex.GummiesAsChips+i+1))
 	print("Rule Waarizard: " + rules[RuleIndex.Waarizard].text)
 
 func init():
@@ -79,8 +91,6 @@ func init():
 	self.inventory.add_item(Chip.new(Chip.Colour.Red, 5))
 	self.inventory.add_item(Chip.new(Chip.Colour.Blue, 3))
 	self.inventory.add_item(Chip.new(Chip.Colour.Green, 1))
-	
-	self.inventory.add_item(GummyBear.new(GummyBear.Colour.Red, 3))
 	
 
 func _ready() -> void:
@@ -108,7 +118,7 @@ func _ready() -> void:
 func get_popup(id: int) -> Node:
 	if id >= RuleIndex.StartTurnBet and id <= RuleIndex.CheatyMeter:
 		return GameData.rules[id].get_popup_node()
-	if id >= ShopItemIndex.Waarizard and id <= ShopItemIndex.Bariho:
+	elif id >= ShopItemIndex.Waarizard and id <= ShopItemIndex.Bariho:
 		var ret = SHOP_POPUP.instantiate()
 		match id:
 			ShopItemIndex.Bariho:
@@ -116,6 +126,8 @@ func get_popup(id: int) -> Node:
 			_:
 				ret.init(MokeponCard.build(id - ShopItemIndex.Waarizard))
 		return ret
+	elif id >= LoopholeIndex.GummiesAsChips and id <= LoopholeIndex.StealCards:
+		return self.loopholes[id-LoopholeIndex.GummiesAsChips].get_popup_node()
 	return null
 
 func _process(delta: float) -> void:
@@ -136,8 +148,11 @@ func _process(delta: float) -> void:
 		is_popup_present = false
 
 func push_popup_queue(rule: int) -> void:
-	if !(rule >= ShopItemIndex.Waarizard and rule <= ShopItemIndex.Bariho) and !GameData.rules[rule].revealed:
+	if rule >= RuleIndex.StartTurnBet and rule <= RuleIndex.CheatyMeter and !GameData.rules[rule].revealed:
 		GameData.rules[rule].revealed = true
+		popup_queue.append(rule)
+	elif rule >= LoopholeIndex.GummiesAsChips and rule <= LoopholeIndex.StealCards and !GameData.loopholes[rule-LoopholeIndex.GummiesAsChips].revealed:
+		GameData.loopholes[rule-LoopholeIndex.GummiesAsChips].revealed = true
 		popup_queue.append(rule)
 	elif rule >= ShopItemIndex.Waarizard and rule <= ShopItemIndex.Bariho:
 		popup_queue.push_front(rule)
