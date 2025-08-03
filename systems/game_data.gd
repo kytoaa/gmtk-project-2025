@@ -49,16 +49,17 @@ var rule_strings: Array[String] = [
 var rules: Array[Rule]
 
 func _init() -> void:
-	self.deck = Deck.new()
-	self.inventory = Inventory.new()
-	self.shop = Shop.new()
-	cheat_meter = 20.0
 	for i in range(len(rule_strings)):
 		rules.append(Rule.new(rule_strings[i], i+1))
 	
 	print("Rule Waarizard: " + rules[RuleIndex.Waarizard].text)
 
 func init():
+	self.deck = Deck.new()
+	self.inventory = Inventory.new()
+	self.shop = Shop.new()
+	cheat_meter = 20.0
+	
 	self.inventory.add_item(Chip.new(Chip.Colour.White, 10))
 	self.inventory.add_item(Chip.new(Chip.Colour.Red, 5))
 	self.inventory.add_item(Chip.new(Chip.Colour.Blue, 3))

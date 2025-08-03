@@ -6,6 +6,7 @@ const RuleIndex = GameData.RuleIndex
 const CARD_SPRITE := preload("res://entities/card/card.tscn")
 const MOKEPON_SPRITE := preload("res://entities/mokepon/mokepon_card.tscn")
 const ROUND_END_MENU := preload("res://ui/round_end_menu.tscn")
+const GAME_OVER_MENU := preload("res://ui/game_over_menu.tscn")
 
 enum DragDropLocation {
 	HAND,
@@ -44,6 +45,7 @@ func _ready() -> void:
 		GameData.push_popup_queue(RuleIndex.Bending)
 	SignalBus.go_to_shop.connect(go_to_shop_cleanup)
 	SignalBus.continue_game.connect(continue_game)
+	SignalBus.on_game_end.connect(game_end)
 	
 	%Inventory.get_child(0).dropped_on_inventory.connect(move_card_from_player_hand_to_inventory)
 	
@@ -67,6 +69,10 @@ func _ready() -> void:
 	self.init()
 	GameData.deck.shuffle()
 	GameData.deck.card_count_change.connect(func(count): $UI/SegmentSplitter/RightSide/VBoxContainer/Deck/CardCount.text = str(count))
+	
+	if GameData.inventory.money(true) < MINIMUM_BET:
+		game_state = GameState.MENU
+		SignalBus.on_game_end.emit()
 
 func init() -> void:
 	self.inventory.init()
@@ -190,6 +196,11 @@ func player_lose() -> void:
 	if game_state in [GameState.MENU, GameState.RETURN_CARDS]:
 		return
 	game_state = GameState.MENU
+	
+	if GameData.inventory.money(true) < MINIMUM_BET:
+		SignalBus.on_game_end.emit()
+		return
+	
 	var round_end_menu = ROUND_END_MENU.instantiate()
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(false)
@@ -261,6 +272,9 @@ func continue_game() -> void:
 	
 	self.player_hand.hand_empty.connect(
 		func():
+			if GameData.inventory.money(true) < MINIMUM_BET:
+				SignalBus.on_game_end.emit()
+				
 			print("hand empty")
 			while len(GameData.deck.cards) < Deck.MAX_CARDS:
 				await get_tree().process_frame
@@ -273,3 +287,7 @@ func continue_game() -> void:
 	)
 	self.round_end_menu.queue_free()
 	self.player_hand_display.convert_to_draggable(self.player_hand.cards)
+
+func game_end() -> void:
+	var menu := GAME_OVER_MENU.instantiate()
+	$UI.add_child(menu)
