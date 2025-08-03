@@ -26,6 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.30556, 0.403262, 0.497885, 1)
 script = ExtResource("2_q0t3s")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ColorRect"]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://b8ec0yxtxcf7m"]
+[gd_scene load_steps=16 format=3 uid="uid://b8ec0yxtxcf7m"]
 
 [ext_resource type="Script" uid="uid://7gi847m676j0" path="res://scenes/game_scene.gd" id="1_onqr8"]
 [ext_resource type="PackedScene" uid="uid://c5kdjgda0ialo" path="res://entities/inventory/inventory.tscn" id="2_bw6k5"]
 [ext_resource type="PackedScene" uid="uid://boxjjraa7skxm" path="res://ui/card_container.tscn" id="2_ycayy"]
 [ext_resource type="Texture2D" uid="uid://cdn55de6hqtk7" path="res://ui/deck.png" id="3_ycayy"]
 [ext_resource type="Script" uid="uid://dnbx7h2pg6kxd" path="res://entities/pot/pot.gd" id="4_y3j0m"]
+[ext_resource type="Texture2D" uid="uid://bv4jw665gtti" path="res://scenes/pot_border.png" id="5_mw25s"]
 [ext_resource type="Script" uid="uid://cpa5ldy8gdk3a" path="res://scenes/card_container_drop.gd" id="5_rurhu"]
 [ext_resource type="Script" uid="uid://dyy6snk0rau5x" path="res://ui/deck_drop.gd" id="7_kk2rg"]
 [ext_resource type="AudioStream" uid="uid://dtxhr1hiqwqq5" path="res://sound/game_music.wav" id="8_b5spy"]
@@ -32,6 +33,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+z_index = -20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.141176, 0.45098, 0.270588, 1)
 
 [node name="SegmentSplitter" type="HBoxContainer" parent="UI"]
 layout_mode = 1
@@ -97,7 +109,7 @@ unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(0, 0, 0, 1)
+color = Color(0.141176, 0.45098, 0.270588, 1)
 script = ExtResource("4_y3j0m")
 
 [node name="Label" type="Label" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer/Pot"]
@@ -108,13 +120,23 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
+offset_left = -44.0
 offset_top = -16.0
+offset_right = -4.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "£0"
 horizontal_alignment = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer/Pot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_mw25s")
 
 [node name="Control" type="Control" parent="UI/SegmentSplitter/VBoxContainer2/Center/HBoxContainer"]
 layout_mode = 2

@@ -78,7 +78,7 @@ func _ready() -> void:
 
 	GameData.cheat_meter_changed.connect(func(value): $UI/SegmentSplitter/RightSide/CheatMeterMargin/CheatMeter.set_value_no_signal(float(value)))
 	
-	if GameData.inventory.money(true) < MINIMUM_BET:
+	if GameData.inventory.money(false) < MINIMUM_BET:
 		game_state = GameState.MENU
 		SignalBus.on_game_end.emit(GameData.LossReason.NO_MONEY)
 
@@ -90,7 +90,7 @@ func _process(delta: float) -> void:
 		GameState.BETTING:
 			GameData.push_popup_queue(RuleIndex.StartTurnBet)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
-			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = true
+			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = true
 		GameState.PLAYER_TURN:
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = false
@@ -170,7 +170,7 @@ func draw_dealer_card() -> void:
 		return
 	
 	if "mokepon" in card:
-		GameData.cheat_meter += 20.0
+		GameData.cheat_meter += 40.0
 
 func dealer_hold() -> void:
 	if game_state != GameState.OPPONENT_TURN:
@@ -205,7 +205,7 @@ func player_lose() -> void:
 		return
 	game_state = GameState.MENU
 	
-	if GameData.inventory.money(true) < MINIMUM_BET:
+	if GameData.inventory.money(false) < MINIMUM_BET:
 		SignalBus.on_game_end.emit(GameData.LossReason.NO_MONEY)
 		return
 	
@@ -225,9 +225,11 @@ func dealer_lose() -> void:
 	$UI.add_child(round_end_menu)
 	round_end_menu.init(true)
 	self.round_end_menu = round_end_menu
+	
 	var items = pot.clear()
 	for item in items:
 		GameData.inventory.add_item(item)
+	
 	GameData.cheat_meter -= 3
 	SignalBus.on_dealer_loss.emit()
 
@@ -242,7 +244,7 @@ func move_card_from_player_hand_to_inventory(card) -> void:
 		return
 	print("moved from hand to inv")
 	player_hand.remove_card(card)
-	GameData.cheat_meter += 2
+	GameData.cheat_meter += 3
 
 func move_card_from_inventory_to_player_hand(card) -> void:
 	if not "suit" in card:
@@ -251,7 +253,7 @@ func move_card_from_inventory_to_player_hand(card) -> void:
 	
 	player_hand_total.text = "Total: " + str(player_hand.sum)
 	
-	GameData.cheat_meter += 5
+	GameData.cheat_meter += 10
 	
 	if player_hand.has_lost():
 		self.player_lose()
@@ -265,7 +267,7 @@ func move_card_from_inventory_to_deck(card) -> void:
 			or card.itemtype == InventoryItem.ItemType.Card):
 		return
 	GameData.deck.add_card(card)
-	GameData.cheat_meter += 2
+	GameData.cheat_meter += 4
 
 func go_to_shop_cleanup() -> void:
 	for card in self.player_hand.cards:
