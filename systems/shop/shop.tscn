@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bs2cp3dcs5h2q"]
+[gd_scene load_steps=7 format=3 uid="uid://bs2cp3dcs5h2q"]
 
 [ext_resource type="PackedScene" uid="uid://c5kdjgda0ialo" path="res://entities/inventory/inventory.tscn" id="1_cvwpr"]
 [ext_resource type="Script" uid="uid://cgitkq5l0duaw" path="res://systems/shop/shop_manager.gd" id="1_rxov8"]
 [ext_resource type="Texture2D" uid="uid://burfa61e7geuc" path="res://systems/shop/mokepon-back.png" id="2_q7vm2"]
 [ext_resource type="Texture2D" uid="uid://d2axa6tmg1kmj" path="res://systems/shop/gummybear.png" id="4_s7g53"]
 [ext_resource type="FontFile" uid="uid://cyj666yjt3or0" path="res://ui/PixelOperator8-Bold.ttf" id="5_s7g53"]
+[ext_resource type="AudioStream" uid="uid://dnga3mubxljla" path="res://sound/shop_menu.wav" id="6_5ohwe"]
 
 [node name="Shop" type="Control"]
 layout_mode = 3
@@ -120,6 +121,10 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "back"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_5ohwe")
+bus = &"Music"
 
 [connection signal="mouse_entered" from="SegmentSplitter/Tesko/Shelf/Items/VBoxContainer/TextureRect" to="." method="_on_texture_rect_mouse_entered"]
 [connection signal="mouse_exited" from="SegmentSplitter/Tesko/Shelf/Items/VBoxContainer/TextureRect" to="." method="_on_texture_rect_mouse_exited"]

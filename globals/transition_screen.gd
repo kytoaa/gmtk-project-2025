@@ -20,12 +20,6 @@ func _on_animation_finished(anim_name):
 		master_vol = AudioServer.get_bus_volume_linear(master_index)
 		SignalBus.on_scene_transition_fade_to_black.emit()
 		animation_player.play(FADE_TO_NORMAL)
-		get_tree().create_tween().tween_method(
-			AudioServer.set_bus_volume_linear.bind(master_index),
-			0,
-			master_vol,
-			animation_player.current_animation_length
-		)
 	elif anim_name == FADE_TO_NORMAL:
 		color_rect.visible = false
 		SignalBus.on_scene_transition_finished.emit()
@@ -36,10 +30,4 @@ func play_transition():
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	color_rect.visible = true
 	animation_player.play(FADE_TO_BLACK)
-	get_tree().create_tween().tween_method(
-		AudioServer.set_bus_volume_linear.bind(master_index),
-		master_vol,
-		0,
-		animation_player.current_animation_length
-	)
 	
