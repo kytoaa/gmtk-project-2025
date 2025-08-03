@@ -107,6 +107,7 @@ func _process(delta: float) -> void:
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
 		GameState.RETURN_CARDS:
+			GameData.push_popup_queue(GameData.RuleIndex.ReturnCards)
 			$UI/SegmentSplitter/RightSide/VBoxContainer/Deck/Sprite2D/Button.can_drop = true
 			$UI/SegmentSplitter/VBoxContainer2/PlayerCards/MarginContainer/ColorRect.can_drop = false
 			pot.can_add_to_pot = false
@@ -152,6 +153,7 @@ func player_hold() -> void:
 	if game_state != GameState.PLAYER_TURN:
 		return
 	if len(player_hand.cards) == 0:
+		GameData.push_popup_queue(GameData.RuleIndex.MustDrawCard)
 		return
 	
 	game_state = GameState.OPPONENT_TURN
@@ -180,6 +182,7 @@ func dealer_hold() -> void:
 		self.dealer_lose()
 	else:
 		self.player_lose()
+	GameData.push_popup_queue(GameData.RuleIndex.DrawIsLoss)
 
 func draw_card(hand: Hand, card_container: CardContainer) -> Variant:
 	var card = GameData.deck.draw_card()
@@ -242,6 +245,8 @@ func move_card_from_player_hand_to_inventory(card) -> void:
 	if not (card.itemtype == InventoryItem.ItemType.MokeponCard
 			or card.itemtype == InventoryItem.ItemType.Card):
 		return
+	
+	GameData.push_popup_queue(GameData.LoopholeIndex.StealCards)
 	print("moved from hand to inv")
 	player_hand.remove_card(card)
 	GameData.cheat_meter += 3
