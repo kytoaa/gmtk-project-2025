@@ -1,6 +1,9 @@
 class_name SceneList
 extends Resource
 
+static func tutorial() -> PackedScene:
+	return preload("res://scenes/tutorial.tscn")
+
 static func main_menu() -> PackedScene:
 	return preload("res://ui/main_menu.tscn")
 
